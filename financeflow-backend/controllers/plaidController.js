@@ -1,28 +1,81 @@
-// Create Plaid link token
-Define createLinkToken function:
-    Extract userID from the request body
-    Call Plaid API to create a link token with userID, client name, and product type (transactions)
-    If successful:
-        Return the link token to the frontend
-    If there's an error:
-        Return error message (e.g., "Failed to create link token")
+const plaid = require('plaid');
+require('dotenv').config();
+const db = require('../config/dbConfig');
 
-// Exchange Plaid public token for access token
-Define exchangePublicToken function:
-    Extract public token and userID from the request body
-    Call Plaid API to exchange the public token for an access token
-    Store the access token and itemID in the database for future use
-    If successful:
-        Return success message with the access token
-    If there's an error:
-        Return error message (e.g., "Failed to exchange public token")
+const configuration = new plaid.Configuration({
+    basePath: plaid.PlaidEnvironments[process.env.PLAID_ENV], // Ensure this is correct
+    baseOptions: {
+        headers: {
+            'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID,
+            'PLAID-SECRET': process.env.PLAID_SECRET,
+        },
+    },
+});
 
-// Fetch transactions from Plaid
-Define getTransactions function:
-    Extract userID from the request parameters
-    Query the database to get the stored access token for the user
-    Call Plaid API to retrieve transactions using the access token
-    If successful:
-        Return the list of transactions to the frontend
-    If there's an error:
-        Return error message (e.g., "Failed to retrieve transactions")
+const plaidClient = new plaid.PlaidApi(configuration);
+
+// Your existing functions for createLinkToken, exchangePublicToken, getTransactions, etc.
+
+
+// Create Plaid Link Token
+const createLinkToken = async (req, res) => {
+  const { userID } = req.body;
+
+  try {
+    const response = await plaidClient.createLinkToken({
+      user: {
+        client_user_id: userID,
+      },
+      client_name: 'FinanceFlow App',
+      products: ['transactions'],
+      country_codes: ['US'],
+      language: 'en',
+    });
+    res.json({ link_token: response.link_token });
+  } catch (error) {
+    console.error('Error creating link token:', error);
+    res.status(500).json({ error: 'Could not create link token' });
+  }
+};
+
+// Exchange Plaid Public Token for Access Token
+const exchangePublicToken = async (req, res) => {
+  const { public_token, userID } = req.body;
+
+  try {
+    const response = await plaidClient.exchangePublicToken(public_token);
+    const accessToken = response.access_token;
+    const itemID = response.item_id;
+
+    // Store accessToken and itemID in the database for future use
+    const query = 'INSERT INTO BankAccounts (userID, accessToken, itemID) VALUES (?, ?, ?)';
+    db.execute(query, [userID, accessToken, itemID], (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(201).json({ message: 'Bank account linked successfully', accessToken });
+    });
+  } catch (error) {
+    console.error('Error exchanging public token:', error);
+    res.status(500).json({ error: 'Could not exchange public token' });
+  }
+};
+
+// Fetch Transactions
+const getTransactions = async (req, res) => {
+  const { userID } = req.params;
+
+  db.execute('SELECT accessToken FROM BankAccounts WHERE userID = ?', [userID], async (err, results) => {
+    if (err || results.length === 0) return res.status(400).json({ error: 'No linked bank account found' });
+
+    const accessToken = results[0].accessToken;
+
+    try {
+      const response = await plaidClient.getTransactions(accessToken, '2024-01-01', '2024-12-31');
+      res.json({ transactions: response.transactions });
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      res.status(500).json({ error: 'Could not fetch transactions' });
+    }
+  });
+};
+
+module.exports = { createLinkToken, exchangePublicToken, getTransactions };

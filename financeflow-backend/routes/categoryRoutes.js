@@ -1,10 +1,11 @@
-// Import express and categoryController
-Import express and categoryController
-Create router object
+// Pseudo code for category routes
 
-// Define routes for managing categories
-POST '/api/categories/create' -> Calls categoryController.addCategory  // Add a new category
-GET '/api/categories' -> Calls categoryController.getCategories  // Get all categories
+const router = require('express').Router();
 
-// Export the router
-Export router
+// Route to create a new category
+router.post('/create', createCategory);
+
+// Route to get all categories for a user
+router.get('/user/:userID', getUserCategories);
+
+module.exports = router;

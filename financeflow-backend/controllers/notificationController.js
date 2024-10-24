@@ -1,17 +1,15 @@
-// Create a notification
-Define createNotification function:
-    Extract userID, message, and type from the request body
-    Insert the notification into the Notifications table
-    If insertion is successful:
-        Return success message (e.g., "Notification created successfully")
-    If there's an error:
-        Return error message (e.g., "Failed to create notification")
+// Pseudo code for notification controller
 
-// Get notifications for a user
-Define getUserNotifications function:
-    Extract userID from the request parameters
-    Query the database to get all notifications associated with the userID
-    If successful:
-        Return the notifications to the frontend
-    If there's an error:
-        Return error message (e.g., "Failed to retrieve notifications")
+// Function to send a notification
+function sendNotification() {
+    // 1. Create notification content (e.g., subscription reminder, budget limit alert)
+    // 2. Send notification to the user
+    // 3. Return success or error message
+  }
+  
+  // Function to get all notifications for a user
+  function getUserNotifications() {
+    // 1. Fetch notifications from the database
+    // 2. Return the list of notifications to the frontend
+  }
+  

@@ -1,4 +1,16 @@
-Import the mysql library
-Setup the MySQL connection with host, user, password, and database details
-Connect to the MySQL database
-Export the connection so other parts of the app can use it
+const mysql = require('mysql2');
+require('dotenv').config();
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '2411004',
+  database: 'financeflow'
+});
+
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to MySQL');
+});
+
+module.exports = connection;

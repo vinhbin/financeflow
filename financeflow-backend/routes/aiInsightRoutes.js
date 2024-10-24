@@ -1,9 +1,16 @@
-// Import express and aiInsightController
-Import express and aiInsightController
-Create router object
+const express = require('express');
+const router = express.Router();
 
-// Define routes for AI insights
-GET '/api/ai-insights/user/:userID' -> Calls aiInsightController.generateAIInsight  // Generate AI insights for a user
+// Example route handler for AI insights
+router.get('/insights', (req, res) => {
+  // Your logic to handle the request and generate insights
+  res.send('AI Insights');
+});
 
-// Export the router
-Export router
+// Another example route handler
+router.post('/insights', (req, res) => {
+  // Your logic to handle the request and process data
+  res.send('AI Insights Created');
+});
+
+module.exports = router;

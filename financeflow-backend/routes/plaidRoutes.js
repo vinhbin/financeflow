@@ -1,11 +1,9 @@
-// Import express and plaidController
-Import express and plaidController
-Create router object
+const express = require('express');
+const { createLinkToken, exchangePublicToken, getTransactions } = require('../controllers/plaidController');
+const router = express.Router();
 
-// Define routes for Plaid integration
-POST '/api/plaid/link' -> Calls plaidController.createLinkToken  // Create Plaid link token
-POST '/api/plaid/exchange' -> Calls plaidController.exchangePublicToken  // Exchange Plaid public token for access token
-GET '/api/plaid/transactions/:userID' -> Calls plaidController.getTransactions  // Fetch transactions for a user
+router.post('/create-link-token', createLinkToken);  // For generating Plaid link token
+router.post('/exchange-public-token', exchangePublicToken);  // For exchanging the public token for access token
+router.get('/transactions/:userID', getTransactions);  // For getting transactions for a user
 
-// Export the router
-Export router
+module.exports = router;

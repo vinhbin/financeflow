@@ -1,10 +1,11 @@
-// Import express and notificationController
-Import express and notificationController
-Create router object
+// Pseudo code for notification routes
 
-// Define routes for notifications
-POST '/api/notifications/create' -> Calls notificationController.createNotification  // Create a new notification
-GET '/api/notifications/user/:userID' -> Calls notificationController.getUserNotifications  // Get notifications for a user
+const router = require('express').Router();
 
-// Export the router
-Export router
+// Route to send a notification
+router.post('/send', sendNotification);
+
+// Route to get notifications for a user
+router.get('/user/:userID', getUserNotifications);
+
+module.exports = router;

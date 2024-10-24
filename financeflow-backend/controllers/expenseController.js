@@ -1,35 +1,63 @@
-// Add a new expense
-Define addExpense function:
-    Extract userID, amount, category, and date from the request body
-    Insert the expense into the Expenses table in the database
-    If insertion is successful:
-        Return success message (e.g., "Expense added successfully")
-    If there's an error:
-        Return error message (e.g., "Failed to add expense")
+const db = require('../config/dbConfig');
+const mysql = require('mysql2/promise');
 
-// Edit an existing expense
-//Define editExpense function:
-    Extract expenseID and updated data (amount, category, date) from the request body
-    Update the corresponding expense in the database based on the expenseID
-    If update is successful:
-        Return success message (e.g., "Expense updated successfully")
-    If there's an error:
-        Return error message (e.g., "Failed to update expense")
+const addExpense = (req, res) => {
+  const { userID, amount, description, categoryID } = req.body; // Extract values from the request body
+  
+  // Validate inputs
+  if (!userID || amount === undefined || !description || categoryID === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+  }
+  
+  const query = 'INSERT INTO Expenses (userID, amount, description, categoryID) VALUES (?, ?, ?, ?)';
+  db.execute(query, [userID, amount, description, categoryID], (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(201).json({ message: 'Expense added successfully' });
+  });
+};
 
-// Delete an expense
-Define deleteExpense function:
-    Extract expenseID from the request parameters
-    Delete the corresponding expense from the database
-    If deletion is successful:
-        Return success message (e.g., "Expense deleted successfully")
-    If there's an error:
-        Return error message (e.g., "Failed to delete expense")
 
-// Get all expenses for a user
-Define getUserExpenses function:
-    Extract userID from the request parameters
-    Query the database for all expenses associated with the userID
-    If found:
-        Return the list of expenses
-    If there's an error:
-        Return error message (e.g., "Failed to retrieve expenses")
+// Get all expenses for a specific user
+const getExpenses = async (req, res) => {
+  const { userID } = req.params;
+
+  let connection;
+  try {
+    connection = await db.getConnection();
+    const [results] = await connection.execute('SELECT * FROM Expenses WHERE userID = ?', [userID]);
+    res.json(results);
+  } catch (err) {
+    console.error('Error fetching expenses:', err);
+    res.status(500).json({ error: err.message });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+};
+
+// Get user metrics (total expenses and upcoming subscriptions)
+const getUserMetrics = async (req, res) => {
+  const { userID } = req.params;
+
+  let connection;
+  try {
+    connection = await db.getConnection();
+    const [expenseResults] = await connection.execute('SELECT SUM(amount) as totalExpenses FROM Expenses WHERE userID = ?', [userID]);
+    const totalExpenses = expenseResults[0].totalExpenses || 0;
+
+    const [subsResults] = await connection.execute('SELECT SUM(amount) as upcomingSubscriptions FROM Subscriptions WHERE userID = ?', [userID]);
+    const upcomingSubscriptions = subsResults[0].upcomingSubscriptions || 0;
+
+    res.json({ totalExpenses, upcomingSubscriptions });
+  } catch (err) {
+    console.error('Error fetching user metrics:', err);
+    res.status(500).json({ error: err.message });
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+};
+
+module.exports = { addExpense };
