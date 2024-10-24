@@ -17,7 +17,7 @@ const addExpense = (req, res) => {
 
 
 const getExpenses = (req, res) => {
-  const { userID } = req.params;
+  const { userID } = req.arams;
 
   db.execute('SELECT * FROM Expenses WHERE userID = ?', [userID], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
