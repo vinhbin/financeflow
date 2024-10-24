@@ -1,9 +1,11 @@
 const express = require('express');
-const { createLinkToken, exchangePublicToken, getTransactions } = require('../controllers/plaidController');
 const router = express.Router();
+const { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions } = require('../controllers/plaidController');
 
-router.post('/create-link-token', createLinkToken);  // For generating Plaid link token
-router.post('/exchange-public-token', exchangePublicToken);  // For exchanging the public token for access token
-router.get('/transactions/:userID', getTransactions);  // For getting transactions for a user
+// Ensure all route handlers are properly imported and defined
+router.post('/link-token', createLinkToken);
+router.post('/exchange-token', exchangePublicToken);
+router.get('/accounts/:userID', getLinkedAccounts);
+router.get('/transactions/:userID', getTransactions);
 
 module.exports = router;

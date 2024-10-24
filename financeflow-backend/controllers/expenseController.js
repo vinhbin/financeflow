@@ -1,63 +1,45 @@
 const db = require('../config/dbConfig');
-const mysql = require('mysql2/promise');
 
 const addExpense = (req, res) => {
-  const { userID, amount, description, categoryID } = req.body; // Extract values from the request body
-  
-  // Validate inputs
+  const { userID, amount, description, categoryID } = req.body;
+
+  // Check if any required parameter is missing or undefined
   if (!userID || amount === undefined || !description || categoryID === undefined) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: 'Missing required fields' });
   }
-  
+
   const query = 'INSERT INTO Expenses (userID, amount, description, categoryID) VALUES (?, ?, ?, ?)';
-  db.execute(query, [userID, amount, description, categoryID], (err) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.status(201).json({ message: 'Expense added successfully' });
+  db.execute(query, [userID, amount, description, categoryID || null], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json({ message: 'Expense added successfully' });
   });
 };
 
 
-// Get all expenses for a specific user
-const getExpenses = async (req, res) => {
+const getExpenses = (req, res) => {
   const { userID } = req.params;
 
-  let connection;
-  try {
-    connection = await db.getConnection();
-    const [results] = await connection.execute('SELECT * FROM Expenses WHERE userID = ?', [userID]);
+  db.execute('SELECT * FROM Expenses WHERE userID = ?', [userID], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
     res.json(results);
-  } catch (err) {
-    console.error('Error fetching expenses:', err);
-    res.status(500).json({ error: err.message });
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
+  });
 };
 
-// Get user metrics (total expenses and upcoming subscriptions)
-const getUserMetrics = async (req, res) => {
+const getUserMetrics = (req, res) => {
   const { userID } = req.params;
 
-  let connection;
-  try {
-    connection = await db.getConnection();
-    const [expenseResults] = await connection.execute('SELECT SUM(amount) as totalExpenses FROM Expenses WHERE userID = ?', [userID]);
-    const totalExpenses = expenseResults[0].totalExpenses || 0;
+  db.execute('SELECT SUM(amount) as totalExpenses FROM Expenses WHERE userID = ?', [userID], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
 
-    const [subsResults] = await connection.execute('SELECT SUM(amount) as upcomingSubscriptions FROM Subscriptions WHERE userID = ?', [userID]);
-    const upcomingSubscriptions = subsResults[0].upcomingSubscriptions || 0;
+    const totalExpenses = results[0].totalExpenses || 0;
 
-    res.json({ totalExpenses, upcomingSubscriptions });
-  } catch (err) {
-    console.error('Error fetching user metrics:', err);
-    res.status(500).json({ error: err.message });
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
+    db.execute('SELECT SUM(amount) as upcomingSubscriptions FROM Subscriptions WHERE userID = ?', [userID], (err, subsResults) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      const upcomingSubscriptions = subsResults[0].upcomingSubscriptions || 0;
+      res.json({ totalExpenses, upcomingSubscriptions });
+    });
+  });
 };
 
-module.exports = { addExpense };
+module.exports = { addExpense, getExpenses, getUserMetrics };
