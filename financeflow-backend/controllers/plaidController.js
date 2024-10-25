@@ -77,3 +77,55 @@ const getTransactions = async (req, res) => {
 };
 
 module.exports = { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions };
+
+*/
+async function getTransactions(req,res) {
+    try {
+        const {userID} = req.params;
+        
+        //Requesting the stored access token
+        const accessToken = await getAccessToken(userID);
+
+        if (!accessToken) {
+            return res.status(404).json({
+                success: false,
+                message: 'Access token not found for user'
+            });
+        }
+
+        //Call Plaid to get transactions
+        const response = await client.transactionsGet({
+            access_token: accessToken,
+            start_date: 'Placeholder',//Replace with actual date
+            end_date: 'Placeholder'//Replace with actual date
+        });
+
+        const transactions = response.transactions;
+
+        return res.status(200).json({
+            success: true,
+            transactions: transactions
+        });
+    
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve transactions',
+            error: error.message
+        });
+    }
+}
+
+async function getAccessToken(userID) {
+    console.log('Retrieving access token')
+    return 'fake access token' //Replace with real access token
+}
+
+//Route for creating a link token
+app.post('/createLinkToken', createLinkToken);
+
+//Route for token exchange
+app.post('/exchangePublicToken', exchangePublicToken);
+
+//Retreiving transactions
+app.get('/getTransactions/:userID', getTransactions);
