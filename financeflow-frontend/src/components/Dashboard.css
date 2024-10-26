@@ -1,0 +1,81 @@
+/* Dashboard.css */
+body {
+    background-color: #9a1d1d;
+    color: #9b0a0a;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  h2, h3 {
+    color: #ffffff;
+    text-shadow: 0px 2px 2px rgba(146, 33, 33, 0.5);
+  }
+  
+  .card {
+    background: rgba(247, 247, 247, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0;
+  }
+  
+  .card p, .card input, .card button {
+    color: #000000;
+  }
+  
+  .card input, .card button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin: 5px 0;
+    background-color: rgba(5, 36, 17, 0.05);
+  }
+  
+  .card input:focus, .card button:hover {
+    background-color: rgba(23, 160, 155, 0.15);
+    outline: none;
+  }
+  
+  .card button {
+    background-color: #ff5722;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .card button:hover {
+    background-color: #ff784e;
+  }
+  
+  .transactions-card table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .transactions-card th, .transactions-card td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(55, 20, 20, 0.1);
+  }
+  
+  .transactions-card th {
+    color: #ff5722;
+  }
+  
+  .transactions-card td {
+    color: #e0e0e0;
+  }
+  

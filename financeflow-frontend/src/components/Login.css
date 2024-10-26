@@ -1,0 +1,89 @@
+/* Glassmorphism login form styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #3b12d1, #c2d0fb);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Style for the main title */
+.login-title {
+    font-size: 3.5rem; /* Large font size */
+    font-weight: bold;
+    color: #ffffff; /* White text for title */
+    text-align: left; /* Align the title to the left */
+    margin-left: 30px; /* Shift the title to the left */
+    margin-bottom: 40px; /* Space between title and form */
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .login-form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-width: 400px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .login-form h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #e0e0e0;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    color: #333;
+  }
+  
+  .glass-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  p {
+    margin-top: 10px;
+    color: #fff;
+  }
+  
