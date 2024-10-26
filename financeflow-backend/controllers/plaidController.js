@@ -78,7 +78,7 @@ const getTransactions = async (req, res) => {
 
 module.exports = { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions };
 
-*/
+
 async function getTransactions(req,res) {
     try {
         const {userID} = req.params;
