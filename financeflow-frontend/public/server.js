@@ -12,10 +12,10 @@ app.use(bodyParser.json());
 
 // MySQL database connection
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: 'financeflow.creae8cg67j8.us-east-1.rds.amazonaws.com',
     user: 'root',
     password: 'password',
-    database: 'financeflow'
+    database: 'expense_manager'
 });
 
 db.connect(err => {
