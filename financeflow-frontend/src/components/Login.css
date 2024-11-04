@@ -1,7 +1,7 @@
 /* Glassmorphism login form styles */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #3b12d1, #c2d0fb);
+    background: linear-gradient(135deg, #5660ea, #c2d0fb);
     height: 100vh;
     margin: 0;
     display: flex;
@@ -14,10 +14,11 @@ body {
     font-weight: bold;
     color: #ffffff; /* White text for title */
     text-align: left; /* Align the title to the left */
-    margin-left: 30px; /* Shift the title to the left */
+    margin-left: 50px; /* Shift the title to the left */
     margin-bottom: 40px; /* Space between title and form */
     font-family: 'Poppins', sans-serif;
   }
+
   
   
   .login-container {

@@ -1,106 +1,119 @@
 // src/components/Dashboard.js
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
+import useAuth from '../hooks/useAuth';
 import Card from './Card';
+import './Dashboard.css';
 
-const Dashboard = ({ userID }) => {
-  // Fetch total expenses and upcoming subscriptions (metrics)
-  const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(`/api/expenses/metrics/${userID}`);
+const Dashboard = () => {
+  const { userID, userName, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // Fetch latest expenses
-  const { data: expenses, loading: expensesLoading, error: expensesError } = useFetch(`/api/expenses/user/${userID}`);
+  // Redirect to login if userID is not present
+  useEffect(() => {
+    if (!userID) {
+      navigate('/login');
+    }
+  }, [userID, navigate]);
 
-  // Fetch linked bank accounts
-  const { data: accounts, loading: accountsLoading, error: accountsError } = useFetch(`/api/plaid/accounts/${userID}`);
-
-  // Fetch recent transactions
-  const { data: transactions, loading: transactionsLoading, error: transactionsError } = useFetch(`/api/plaid/transactions/${userID}`);
-
-  // Fetch AI insights
-  const { data: aiInsight, loading: aiLoading, error: aiError } = useFetch(`/api/ai-insights/generate`, {
-    method: 'POST',
-    data: { userID },
-  });
+  // Fetch data for dashboard unconditionally with default URLs
+  const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(
+    userID ? `/api/expenses/metrics/${userID}` : ''
+  );
+  const { data: expenses, loading: expensesLoading, error: expensesError } = useFetch(
+    userID ? `/api/expenses/user/${userID}` : ''
+  );
+  const { data: accounts, loading: accountsLoading, error: accountsError } = useFetch(
+    userID ? `/api/plaid/accounts/${userID}` : ''
+  );
+  const { data: transactions, loading: transactionsLoading, error: transactionsError } = useFetch(
+    userID ? `/api/plaid/transactions/${userID}` : ''
+  );
+  const { data: aiInsight, loading: aiLoading, error: aiError } = useFetch(
+    userID ? `/api/ai-insights/generate` : '',
+    userID ? { method: 'POST', data: { userID } } : null
+  );
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
+      <div className="dashboard-header">
+        <h2>Welcome, {userName}!</h2>
+        <button className="logout-button" onClick={logout}>Logout</button>
+      </div>
 
-      {/* Metrics Section */}
-      <Card title="Financial Metrics">
-        {metricsLoading ? (
-          <p>Loading metrics...</p>
-        ) : metricsError ? (
-          <p>{metricsError}</p>
-        ) : (
-          <div>
-            <p>Total Expenses: ${metrics?.totalExpenses}</p>
-            <p>Upcoming Subscriptions: ${metrics?.upcomingSubscriptions}</p>
-          </div>
-        )}
-      </Card>
+      <div className="dashboard-row">
+        <Card title="Linked Bank Accounts" className="bank-accounts">
+          {accountsLoading ? (
+            <p>Loading accounts...</p>
+          ) : accountsError ? (
+            <p>{accountsError}</p>
+          ) : (
+            <ul>
+              {accounts?.map((account) => (
+                <li key={account.accountID}>{account.name} - {account.type}</li>
+              ))}
+            </ul>
+          )}
+        </Card>
 
-      {/* Expenses Section */}
-      <Card title="Recent Expenses">
-        {expensesLoading ? (
-          <p>Loading expenses...</p>
-        ) : expensesError ? (
-          <p>{expensesError}</p>
-        ) : (
-          <ul>
-            {expenses.slice(0, 5).map((expense) => (
-              <li key={expense.expenseID}>
-                {expense.description}: ${expense.amount}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+        <Card title="Financial Metrics" className="metrics">
+          {metricsLoading ? (
+            <p>Loading metrics...</p>
+          ) : metricsError ? (
+            <p>{metricsError}</p>
+          ) : (
+            <div>
+              <p>Total Expenses: ${metrics?.totalExpenses}</p>
+              <p>Upcoming Subscriptions: ${metrics?.upcomingSubscriptions}</p>
+            </div>
+          )}
+        </Card>
+      </div>
 
-      {/* Bank Accounts Section */}
-      <Card title="Linked Bank Accounts">
-        {accountsLoading ? (
-          <p>Loading accounts...</p>
-        ) : accountsError ? (
-          <p>{accountsError}</p>
-        ) : (
-          <ul>
-            {accounts.map((account) => (
-              <li key={account.accountID}>
-                {account.name} - {account.type}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+      <div className="dashboard-row">
+        <Card title="Recent Transactions" className="transactions">
+          {transactionsLoading ? (
+            <p>Loading transactions...</p>
+          ) : transactionsError ? (
+            <p>{transactionsError}</p>
+          ) : (
+            <ul>
+              {transactions?.slice(0, 5).map((transaction) => (
+                <li key={transaction.id}>
+                  {transaction.description}: ${transaction.amount} on {new Date(transaction.date).toLocaleDateString()}
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
 
-      {/* Transactions Section */}
-      <Card title="Recent Transactions">
-        {transactionsLoading ? (
-          <p>Loading transactions...</p>
-        ) : transactionsError ? (
-          <p>{transactionsError}</p>
-        ) : (
-          <ul>
-            {transactions.slice(0, 5).map((transaction) => (
-              <li key={transaction.id}>
-                {transaction.description}: ${transaction.amount} on {new Date(transaction.date).toLocaleDateString()}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+        <Card title="AI Financial Insight" className="ai-insight">
+          {aiLoading ? (
+            <p>Loading insights...</p>
+          ) : aiError ? (
+            <p>{aiError}</p>
+          ) : (
+            <p>{aiInsight}</p>
+          )}
+        </Card>
+      </div>
 
-      {/* AI Financial Insight Section */}
-      <Card title="AI Financial Insight">
-        {aiLoading ? (
-          <p>Loading insights...</p>
-        ) : aiError ? (
-          <p>{aiError}</p>
-        ) : (
-          <p>{aiInsight}</p>
-        )}
-      </Card>
+      <div className="dashboard-row">
+        <Card title="Recent Expenses" className="expenses">
+          {expensesLoading ? (
+            <p>Loading expenses...</p>
+          ) : expensesError ? (
+            <p>{expensesError}</p>
+          ) : (
+            <ul>
+              {expenses?.slice(0, 5).map((expense) => (
+                <li key={expense.expenseID}>{expense.description}: ${expense.amount}</li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
