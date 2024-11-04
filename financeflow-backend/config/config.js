@@ -22,7 +22,7 @@ module.exports = {
   plaidClientId: process.env.PLAID_CLIENT_ID,
   plaidSecret: process.env.PLAID_SECRET,
   jwtSecret: process.env.JWT_SECRET,
-  port: process.env.PORT || 5005,
+  port: process.env.PORT || 5007,
   MYSQLHost: process.env.MYSQL_HOST,
   // include other variables as needed
 };

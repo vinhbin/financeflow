@@ -25,10 +25,12 @@ const Login = () => {
 
       // Set success message and navigate to dashboard
       setMessage('Login successful!');
+      console.log("Redirecting to dashboard...");
       navigate('/dashboard');
+      console.log("Token set in localStorage:", localStorage.getItem('token')); // Debugging line
     } catch (error) {
       console.error('Error logging in:', error.response ? error.response.data : error.message);
-      setMessage(error.response?.data?.message || 'Login failed. Please try again.');
+      setMessage(error.response?.data?.message || 'Login failed. Please check your credentials.');
     }
   };
   

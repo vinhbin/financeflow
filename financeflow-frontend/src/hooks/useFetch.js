@@ -1,8 +1,9 @@
-// hooks/useFetch.js
+// useFetch.js
 import { useState, useEffect } from 'react';
-import api from '../utils/api';
+import axios from 'axios';
+import { API_BASE_URL } from '../utils/api';
 
-const useFetch = (url, options) => {
+const useFetch = (path) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,17 +11,19 @@ const useFetch = (url, options) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api(url, options);
+        console.log(`Fetching: ${API_BASE_URL}${path}`); // Log the full URL
+        const response = await axios.get(`${API_BASE_URL}${path}`);
         setData(response.data);
-      } catch (err) {
-        setError('Failed to fetch data. Please try again later.');
+      } catch (error) {
+        console.error('Error fetching data:', error); // Log the error
+        setError(error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, options]);
+  }, [path]);
 
   return { data, loading, error };
 };

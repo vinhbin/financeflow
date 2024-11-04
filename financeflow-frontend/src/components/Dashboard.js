@@ -16,6 +16,7 @@ const Dashboard = () => {
       navigate('/login');
     }
   }, [userID, navigate]);
+  console.log("Dashboard Loaded")
 
   // Fetch data for dashboard unconditionally with default URLs
   const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(
