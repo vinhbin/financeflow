@@ -1,35 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
+// src/components/Expenses.js
+import React, { useState } from 'react';
+import useFetch from '../hooks/useFetch';
+import api from '../utils/api';
 
-const Expenses = () => {
-  const [expenses, setExpenses] = useState([]);
+const Expenses = ({ userID }) => {
+  const { data: expenses, loading, error } = useFetch(`/api/expenses/user/${userID}`);
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
 
-  useEffect(() => {
-    const fetchExpenses = async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_BASE_URL}/api/expenses/user/1`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setExpenses(response.data);
-    };
-
-    fetchExpenses();
-  }, []);
-
   const handleAddExpense = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-    const newExpense = { description, amount: parseFloat(amount) };
-    const response = await axios.post(`${API_BASE_URL}/api/expenses`, newExpense, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setExpenses([...expenses, response.data]);
-    setDescription('');
-    setAmount('');
+    try {
+      const newExpense = { description, amount: parseFloat(amount) };
+      await api.post('/api/expenses', newExpense, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setDescription('');
+      setAmount('');
+    } catch (err) {
+      console.error('Error adding expense:', err);
+    }
   };
+
+  if (loading) return <p>Loading expenses...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>

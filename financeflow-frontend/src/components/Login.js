@@ -1,8 +1,8 @@
+// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
-import './Login.css';  // External CSS file for styling
+import api from '../utils/api';
+import './Login.css'; // External CSS file for styling
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,19 +12,26 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setMessage(''); // Reset message on new login attempt
+
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/login`, { email, password });
+      // Make a POST request to the backend API
+      const response = await api.post('/api/users/login', { email, password });
+      
+      // Store the token, userID, and email in localStorage
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userID', response.data.userID);
       localStorage.setItem('userName', email);
+
+      // Set success message and navigate to dashboard
       setMessage('Login successful!');
       navigate('/dashboard');
     } catch (error) {
-      setMessage('Login failed. Please try again.');
-      console.error('Error logging in:', error);
+      console.error('Error logging in:', error.response ? error.response.data : error.message);
+      setMessage(error.response?.data?.message || 'Login failed. Please try again.');
     }
   };
-
+  
   return (
     <div className="login-container">
       <h1 className="login-title">FinanceFlow</h1>
@@ -37,6 +44,7 @@ const Login = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
               required
             />
           </div>
@@ -46,15 +54,22 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
               required
             />
           </div>
           <button type="submit" className="glass-button">Login</button>
         </form>
 
+        {/* Display success or error message */}
         <p>{message}</p>
 
-        <p>Don't have an account? <button className="glass-button" onClick={() => navigate('/register')}>Register Here</button></p>
+        {/* Link to register page */}
+        <p>Don't have an account? 
+          <button className="glass-button" onClick={() => navigate('/register')}>
+            Register Here
+          </button>
+        </p>
       </div>
     </div>
   );

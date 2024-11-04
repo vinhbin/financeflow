@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
+// src/components/AIInsights.js
+import React from 'react';
+import useFetch from '../hooks/useFetch';
 
 const AIInsights = ({ userID }) => {
-  const [insight, setInsight] = useState('');
+  const { data: insight, loading, error } = useFetch('/api/ai-insights/generate', {
+    method: 'POST',
+    data: { userID },
+  });
 
-  useEffect(() => {
-    const fetchInsights = async () => {
-      try {
-        const response = await axios.post(`${API_BASE_URL}/api/ai-insights/generate`, { userID });
-        setInsight(response.data.insight);
-      } catch (error) {
-        console.error('Error fetching AI insights:', error);
-      }
-    };
-
-    fetchInsights();
-}, [userID]);
-
+  if (loading) return <p>Loading insights...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
       <h3>Your AI Financial Insight</h3>
-      {insight ? <p>{insight}</p> : <p>Loading insights...</p>}
+      <p>{insight}</p>
     </div>
   );
 };

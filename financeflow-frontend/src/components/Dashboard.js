@@ -1,100 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
-import PlaidLinkButton from './PlaidLinkButton';
-import AIInsights from './AIInsights';
-import TransactionsList from './TransactionsList';
-import './Dashboard.css'; // Add this line to import the CSS
+// src/components/Dashboard.js
+import React from 'react';
+import useFetch from '../hooks/useFetch';
+import Card from './Card';
 
 const Dashboard = ({ userID }) => {
-  const [metrics, setMetrics] = useState({ totalExpenses: 0, upcomingSubscriptions: 0 });
-  const [accounts, setAccounts] = useState([]);
-  const [newExpense, setNewExpense] = useState({ amount: '', description: '' });
+  // Fetch total expenses and upcoming subscriptions (metrics)
+  const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(`/api/expenses/metrics/${userID}`);
 
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/expenses/metrics/${userID}`);
-        setMetrics(response.data);
-      } catch (error) {
-        console.error('Error fetching metrics:', error);
-      }
-    };
-    fetchMetrics();
-  }, [userID]);
+  // Fetch latest expenses
+  const { data: expenses, loading: expensesLoading, error: expensesError } = useFetch(`/api/expenses/user/${userID}`);
 
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/plaid/accounts/${userID}`);
-        setAccounts(response.data);
-      } catch (error) {
-        console.error('Error fetching accounts:', error);
-      }
-    };
-    fetchAccounts();
-  }, [userID]);
+  // Fetch linked bank accounts
+  const { data: accounts, loading: accountsLoading, error: accountsError } = useFetch(`/api/plaid/accounts/${userID}`);
 
-  const handleAddExpense = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/api/expenses/create`, { userID, amount: newExpense.amount, description: newExpense.description });
-      setNewExpense({ amount: '', description: '' });
-    } catch (error) {
-      console.error('Error adding expense:', error);
-    }
-  };
+  // Fetch recent transactions
+  const { data: transactions, loading: transactionsLoading, error: transactionsError } = useFetch(`/api/plaid/transactions/${userID}`);
+
+  // Fetch AI insights
+  const { data: aiInsight, loading: aiLoading, error: aiError } = useFetch(`/api/ai-insights/generate`, {
+    method: 'POST',
+    data: { userID },
+  });
 
   return (
-    <div className="dashboard-container">
-      <h2>Welcome, {localStorage.getItem('userName')}!</h2>
+    <div className="dashboard">
+      <h2>Dashboard</h2>
 
-      <div className="card metrics-card">
-        <h3>Key Metrics</h3>
-        <p>Total Expenses: <span>${metrics.totalExpenses}</span></p>
-        <p>Upcoming Subscriptions: <span>${metrics.upcomingSubscriptions}</span></p>
-      </div>
-
-      <div className="card accounts-card">
-        <h3>Bank Accounts</h3>
-        {accounts.length > 0 ? (
-          accounts.map((account) => (
-            <p key={account.id}>Account: {account.name}</p>
-          ))
+      {/* Metrics Section */}
+      <Card title="Financial Metrics">
+        {metricsLoading ? (
+          <p>Loading metrics...</p>
+        ) : metricsError ? (
+          <p>{metricsError}</p>
         ) : (
-          <PlaidLinkButton userID={userID} />
+          <div>
+            <p>Total Expenses: ${metrics?.totalExpenses}</p>
+            <p>Upcoming Subscriptions: ${metrics?.upcomingSubscriptions}</p>
+          </div>
         )}
-      </div>
+      </Card>
 
-      <div className="card add-expense-card">
-        <h3>Add New Expense</h3>
-        <input
-          type="number"
-          value={newExpense.amount}
-          placeholder="Amount"
-          onChange={(e) => setNewExpense({ ...newExpense, amount: parseFloat(e.target.value) || '' })}
-        />
-        <input
-          type="text"
-          value={newExpense.description}
-          placeholder="Description"
-          onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
-        />
-        <button
-          onClick={handleAddExpense}
-          disabled={!newExpense.amount || !newExpense.description}
-        >
-          Add Expense
-        </button>
-      </div>
-      <div className="card transactions-card">
-        <h3>Your Transactions</h3>
-        <TransactionsList userID={userID} />
-      </div>
+      {/* Expenses Section */}
+      <Card title="Recent Expenses">
+        {expensesLoading ? (
+          <p>Loading expenses...</p>
+        ) : expensesError ? (
+          <p>{expensesError}</p>
+        ) : (
+          <ul>
+            {expenses.slice(0, 5).map((expense) => (
+              <li key={expense.expenseID}>
+                {expense.description}: ${expense.amount}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
 
-      <div className="card insights-card">
-        <h3>AI Financial Insights</h3>
-        <AIInsights userID={userID} />
-      </div>
+      {/* Bank Accounts Section */}
+      <Card title="Linked Bank Accounts">
+        {accountsLoading ? (
+          <p>Loading accounts...</p>
+        ) : accountsError ? (
+          <p>{accountsError}</p>
+        ) : (
+          <ul>
+            {accounts.map((account) => (
+              <li key={account.accountID}>
+                {account.name} - {account.type}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
+
+      {/* Transactions Section */}
+      <Card title="Recent Transactions">
+        {transactionsLoading ? (
+          <p>Loading transactions...</p>
+        ) : transactionsError ? (
+          <p>{transactionsError}</p>
+        ) : (
+          <ul>
+            {transactions.slice(0, 5).map((transaction) => (
+              <li key={transaction.id}>
+                {transaction.description}: ${transaction.amount} on {new Date(transaction.date).toLocaleDateString()}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
+
+      {/* AI Financial Insight Section */}
+      <Card title="AI Financial Insight">
+        {aiLoading ? (
+          <p>Loading insights...</p>
+        ) : aiError ? (
+          <p>{aiError}</p>
+        ) : (
+          <p>{aiInsight}</p>
+        )}
+      </Card>
     </div>
   );
 };

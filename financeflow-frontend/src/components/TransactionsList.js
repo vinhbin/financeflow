@@ -1,29 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
+// src/components/TransactionsList.js
+import React from 'react';
+import useFetch from '../hooks/useFetch';
 
-function TransactionsList({ userID }) {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/plaid/transactions/${userID}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setTransactions(response.data);
-      } catch (err) {
-        setError('Error fetching transactions');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTransactions();
-  }, [userID]);
+const TransactionsList = ({ userID }) => {
+  const { data: transactions, loading, error } = useFetch(`/api/plaid/transactions/${userID}`);
 
   if (loading) return <p>Loading transactions...</p>;
   if (error) return <p>{error}</p>;
@@ -51,6 +31,6 @@ function TransactionsList({ userID }) {
       </table>
     </div>
   );
-}
+};
 
 export default TransactionsList;

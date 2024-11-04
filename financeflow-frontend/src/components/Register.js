@@ -1,31 +1,32 @@
+// src/components/Register.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import api from '../utils/api'; // Import the axios instance for API calls
 
 const Register = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''); // State for storing name
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setMessage('');
+    
+    console.log('Registering with:', { name, email, password }); // Debugging log
+
     try {
-      await axios.post('/api/users/register', {
-        name,
-        email,
-        password,
-      });
-      setMessage('Registration successful! Please log in.');
+      // Send name, email, and password to the backend
+      const response = await api.post('/api/users/register', { name, email, password });
+      console.log('Registration successful:', response.data);
+      setMessage('Registration successful!');
     } catch (error) {
-      setMessage('Registration failed. Please try again.');
-      console.error('Error registering user:', error);
+      console.error('Error registering:', error.response ? error.response.data : error.message);
+      setMessage(error.response?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
   return (
     <div>
-      <h2>Register</h2>
       <form onSubmit={handleRegister}>
         <div>
           <label>Name</label>
@@ -33,6 +34,7 @@ const Register = () => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
             required
           />
         </div>
@@ -42,6 +44,7 @@ const Register = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
             required
           />
         </div>
@@ -51,15 +54,13 @@ const Register = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
             required
           />
         </div>
         <button type="submit">Register</button>
       </form>
       <p>{message}</p>
-      <p>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
     </div>
   );
 };

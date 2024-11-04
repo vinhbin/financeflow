@@ -19,7 +19,7 @@ app.use('/api/expenses', expenseRoutes);
 app.use('/api/plaid', plaidRoutes);
 app.use('/api/ai-insights', aiInsightRoutes);
 
-const PORT = process.env.PORT || 5008;
+const PORT = process.env.PORT || 5006;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
