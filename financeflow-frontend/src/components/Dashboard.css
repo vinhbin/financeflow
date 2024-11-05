@@ -1,5 +1,25 @@
 /* src/components/Dashboard.css */
 
+/* Reset some basic elements for consistency */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set the body to take full height and use Flexbox for centering */
+body {
+  font-family: 'Poppins', sans-serif; /* Use 'Poppins' for consistency */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center; /* Vertical centering */
+  justify-content: center; /* Horizontal centering */
+  position: relative; /* To position the gradient-bg absolutely */
+  overflow: hidden; /* Hide overflow caused by animated gradients */
+}
+
+/* Container for the login/register form and title */
 .dashboard {
   max-width: 1200px; /* Increased width for spacious layout */
   margin: auto;
@@ -7,11 +27,47 @@
   font-family: Arial, sans-serif;
 }
 
-.dashboard h2 {
-  text-align: center;
-  margin-bottom: 30px;
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px; /* Space between header and content */
+  padding: 0 20px; /* Optional: Add padding for better spacing on larger screens */
+}
+
+/* Main Welcome Header */
+.dashboard-header h2 {
   font-size: 2.5rem; /* Larger welcome text */
-  color: #333;
+  color: #ffffff; /* White text */
+  text-align: center; /* Center the title text */
+  margin: 0; /* Remove default margins */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adds depth to the title */
+}
+
+/* Logout Button */
+.logout-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff; /* White text */
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.02); /* Slight scale-up on hover */
+}
+
+.logout-button:active {
+  transform: scale(0.98);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Layout rows */
@@ -22,17 +78,26 @@
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background for glass effect */
+  background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background for better contrast */
   border-radius: 15px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Darker shadow for depth */
   padding: 20px;
   width: 48%; /* Adjust width for two-column layout */
   font-size: 1.1rem;
   margin: 10px; /* Add margin around each card to create space */
   backdrop-filter: blur(10px); /* Blur effect for glassmorphism */
   -webkit-backdrop-filter: blur(10px); /* Safari support */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Slight border for definition */
-  color: #333; /* Text color for readability */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Slight border for definition */
+  color: #ffffff; /* White text */
+}
+
+.card h3 {
+  color: #ffffff; /* White card titles */
+}
+
+.card p,
+.card li {
+  color: #ffffff; /* White paragraphs and list items */
 }
 
 .card ul {
@@ -58,22 +123,4 @@
 .expenses {
   width: calc(100% - 20px); /* Full width for expenses with margin on both sides */
   margin-top: 20px;
-}
-
-.logout-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.3);
-  color: #333;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(5px);
-  transition: background 0.3s ease;
-}
-
-.logout-button:hover {
-  background: rgba(255, 255, 255, 0.5);
 }

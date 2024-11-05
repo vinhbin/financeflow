@@ -1,3 +1,4 @@
+//plaidController.js
 const plaid = require('plaid');
 const db = require('../config/dbConfig');
 const asyncHandler = require('../middleware/asyncHandler');

@@ -1,3 +1,4 @@
+//plaidRoutes.js
 const express = require('express');
 const router = express.Router();
 const { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions } = require('../controllers/plaidController');

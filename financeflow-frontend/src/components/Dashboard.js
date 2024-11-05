@@ -5,19 +5,25 @@ import useFetch from '../hooks/useFetch';
 import useAuth from '../hooks/useAuth';
 import Card from './Card';
 import './Dashboard.css';
+import { getFirstName } from '../utils/nameUtils'; // Import the utility function
 
 const Dashboard = () => {
+  console.log('Dashboard component rendered.'); // Debugging log
   const { userID, userName, logout } = useAuth();
   const navigate = useNavigate();
+
+  // Use the helper function to get the formatted first name
+  const firstName = getFirstName(userName);
 
   // Redirect to login if userID is not present
   useEffect(() => {
     if (!userID) {
-      navigate('/login');
+      console.log('No userID found. Redirecting to login.');
+      navigate('/login'); // Correct redirection
     }
   }, [userID, navigate]);
 
-  // Fetch data for dashboard unconditionally with default URLs
+  // Fetch data for dashboard conditionally based on userID
   const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(
     userID ? `/api/expenses/metrics/${userID}` : ''
   );
@@ -38,10 +44,12 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h2>Welcome, {userName}!</h2>
+        <h2>Welcome, {firstName}!</h2> {/* Displaying the formatted first name */}
         <button className="logout-button" onClick={logout}>Logout</button>
       </div>
 
+      {/* Rest of the Dashboard content */}
+      {/* Example: Display linked bank accounts */}
       <div className="dashboard-row">
         <Card title="Linked Bank Accounts" className="bank-accounts">
           {accountsLoading ? (
@@ -51,7 +59,7 @@ const Dashboard = () => {
           ) : (
             <ul>
               {accounts?.map((account) => (
-                <li key={account.accountID}>{account.name} - {account.type}</li>
+                <li key={account.id}>{account.accountName} - {account.type}</li>
               ))}
             </ul>
           )}
@@ -80,7 +88,7 @@ const Dashboard = () => {
           ) : (
             <ul>
               {transactions?.slice(0, 5).map((transaction) => (
-                <li key={transaction.id}>
+                <li key={transaction.transactionID}>
                   {transaction.description}: ${transaction.amount} on {new Date(transaction.date).toLocaleDateString()}
                 </li>
               ))}

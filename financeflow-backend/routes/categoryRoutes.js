@@ -1,3 +1,4 @@
+//categoryRoutes.js
 // Pseudo code for category routes
 
 const router = require('express').Router();

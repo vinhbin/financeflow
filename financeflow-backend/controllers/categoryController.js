@@ -1,3 +1,4 @@
+//categoryController.js
 const asyncHandler = require('../middleware/asyncHandler');
 const db = require('../config/dbConfig');
 

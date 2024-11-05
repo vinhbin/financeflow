@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5005';
+console.log('API_BASE_URL:', API_BASE_URL); // Debugging log
 
 if (!API_BASE_URL) {
   throw new Error("API_BASE_URL is not defined in environment variables.");
@@ -14,6 +15,7 @@ const api = axios.create({
   },
 });
 
+// Optional: Add authorization headers if needed
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {

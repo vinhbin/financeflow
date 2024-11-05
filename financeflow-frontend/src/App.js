@@ -1,24 +1,28 @@
-// App.js
+// src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 import Login from './components/Login';
 import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import { AuthProvider } from './context/AuthContext'; // Named import
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* Redirect to login if no matching route */}
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Add other routes here */}
+          </Routes>
+        </Layout>
+      </AuthProvider>
     </Router>
   );
-}
+};
 
 export default App;

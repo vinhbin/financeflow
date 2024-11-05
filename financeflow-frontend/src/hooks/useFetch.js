@@ -1,4 +1,4 @@
-// hooks/useFetch.js
+// src/hooks/useFetch.js
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 
@@ -8,6 +8,12 @@ const useFetch = (url, options) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Skip fetching if URL is empty
+    if (!url) {
+      setLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await api(url, options);

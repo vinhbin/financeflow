@@ -1,3 +1,4 @@
+//expenseRoutes.js
 const express = require('express');
 const router = express.Router();
 const { addExpense, getExpenses, getUserMetrics } = require('../controllers/expenseController');

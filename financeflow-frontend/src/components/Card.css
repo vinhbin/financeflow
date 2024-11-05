@@ -1,17 +1,31 @@
-/* Card.css */
+/* src/components/Card.css */
+
 .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    background-color: #f9f9f9;
-  }
-  
-  .card h3 {
-    margin-top: 0;
-  }
-  
-  .card-content {
-    margin-top: 8px;
-  }
-  
+  /* Allow parent styles to override if necessary */
+  /* If default styles are needed, set a complementary background */
+  background: rgba(0, 0, 0, 0.5); /* Optional: Default dark background */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Semi-transparent border */
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  color: #ffffff; /* White text */
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #ffffff; /* Ensure header is white */
+}
+
+.card-content {
+  margin-top: 8px;
+  color: #ffffff; /* Ensure content is white */
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card li {
+  margin-bottom: 8px;
+}

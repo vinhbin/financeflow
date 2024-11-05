@@ -1,0 +1,171 @@
+/* src/components/Auth.css */
+
+/* Reset some basic elements for consistency */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set the body to take full height and use Flexbox for centering */
+body {
+  font-family: 'Poppins', sans-serif; /* Use 'Poppins' for consistency */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center; /* Vertical centering */
+  justify-content: center; /* Horizontal centering */
+  position: relative; /* To position the gradient-bg absolutely */
+  overflow: hidden; /* Hide overflow caused by animated gradients */
+}
+
+/* Container for the login/register form and title */
+.auth-container {
+  width: 100%;
+  max-width: 600px; /* Limit the container's maximum width */
+  padding: 0 20px; /* Add horizontal padding for smaller screens */
+  position: relative; /* To ensure gradient-bg is positioned correctly */
+  z-index: 2; /* Ensure content is above the gradient */
+  
+  /* Center the container within the body */
+  margin: auto;
+}
+
+/* Style for the main title */
+.auth-title {
+  font-size: 3.5rem; /* Large font size */
+  font-weight: bold;
+  color: #ffffff; /* White text for title */
+  text-align: center; /* Center the title text */
+  margin-bottom: 20px; /* Space between title and form */
+  font-family: 'Poppins', sans-serif; /* Match body font */
+  z-index: 3; /* Ensure the title is above the gradients */
+}
+
+/* Style for the login/register form */
+.auth-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 400px; /* Retain original size */
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  z-index: 2; /* Ensure the form is above the gradient but below the title */
+  
+  /* Center the form horizontally */
+  margin: 0 auto;
+}
+
+.auth-form h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #e0e0e0;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  color: #333;
+}
+
+/* Glass button for Login/Register */
+.glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%; /* Make buttons full width for consistency */
+  z-index: 2;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Paragraph styling */
+p {
+  margin-top: 10px;
+  color: #fff;
+  text-align: center; /* Center-align the messages */
+}
+
+/* New classes for switch text and link */
+.switch-text {
+  color: #ccc; /* Grey color for the text */
+  margin-right: 5px; /* Space between text and link */
+  font-size: 1rem; /* Same font size as login button */
+}
+
+.switch-link {
+  color: #ffffff; /* White text */
+  font-size: 1rem; /* Same font size as login button */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.switch-link:hover {
+  color: #fda085; /* Change color on hover for feedback */
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Error message styling */
+.error-message {
+  color: #e74c3c; /* Red color for errors */
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Spinner additional styles */
+.spinner {
+  display: block;
+  margin: 20px auto;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .auth-title {
+    font-size: 2.5rem; /* Reduce title size on smaller screens */
+  }
+
+  .auth-form {
+    padding: 30px; /* Reduce padding */
+  }
+
+  .input-group {
+    margin-bottom: 15px; /* Reduce space between input groups */
+  }
+
+  .glass-button,
+  .switch-link {
+    padding: 8px 16px; /* Adjust padding if necessary */
+    font-size: 0.9rem; /* Slightly smaller font size */
+  }
+
+  .switch-text {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+}

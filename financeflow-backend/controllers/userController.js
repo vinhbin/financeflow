@@ -1,3 +1,4 @@
+// controllers/userController.js
 const db = require('../config/dbConfig');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -48,38 +49,39 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 // User login function
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
-  }
-
+  
   try {
-    const query = 'SELECT * FROM Users WHERE email = ?';
-    const [userRows] = await db.execute(query, [email]);
-
-    if (!Array.isArray(userRows) || userRows.length === 0) {
-      console.error('Unexpected users query result:', userRows);
-      return res.status(401).json({ error: 'Invalid credentials' });
+    // Fetch user from the database
+    const [rows] = await db.execute('SELECT userID, name, email, password FROM Users WHERE email = ?', [email]);
+    
+    if (rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
-
-    const user = userRows[0];
-
-    // Verify password by comparing with the hashed password in the database
+    
+    const user = rows[0];
+    
+    // Compare passwords (assuming you're using bcrypt)
     const isMatch = await bcrypt.compare(password, user.password);
+    
     if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
-
+    
     // Generate JWT token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.json({ token, userID: user.id });
+    const token = jwt.sign(
+      { userID: user.userID, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    
+    // Respond with token, userID, and name
+    res.status(200).json({ token, userID: user.userID, name: user.name });
   } catch (error) {
     console.error('Error during login:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error' });
   }
-});
+};
 
-module.exports = { loginUser, registerUser };
+module.exports = { registerUser, loginUser };
