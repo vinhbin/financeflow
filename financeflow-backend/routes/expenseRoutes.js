@@ -1,4 +1,4 @@
-//expenseRoutes.js
+// routes/expenseRoutes.js
 const express = require('express');
 const router = express.Router();
 const { addExpense, getExpenses, getUserMetrics } = require('../controllers/expenseController');
@@ -7,9 +7,9 @@ const { addExpense, getExpenses, getUserMetrics } = require('../controllers/expe
 router.post('/create', addExpense);
 
 // Route to get all expenses for a specific user
-router.get('/:userID', getExpenses);
+router.get('/user/:userID', getExpenses);
 
-// Route to get key metrics (total expenses and subscriptions) for a user
+// Route to get key metrics for a user
 router.get('/metrics/:userID', getUserMetrics);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-//aiInsightRoutes.js
+//routes/aiInsightRoutes.js
 const express = require('express');
 const { generateAIInsight } = require('../controllers/aiInsightController');
 const router = express.Router();

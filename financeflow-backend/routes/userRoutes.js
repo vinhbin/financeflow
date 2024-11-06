@@ -1,4 +1,4 @@
-//userRoutes.js
+//routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser } = require('../controllers/userController'); // Ensure these are correctly imported

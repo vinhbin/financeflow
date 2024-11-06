@@ -1,25 +1,31 @@
 // src/hooks/useFetch.js
 import { useState, useEffect } from 'react';
-import api from '../utils/api';
+import axios from 'axios';
 
-const useFetch = (url, options) => {
+const useFetch = (url, options = {}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Skip fetching if URL is empty
-    if (!url) {
-      setLoading(false);
-      return;
-    }
+    if (!url) return; // Skip if no URL
 
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await api(url, options);
+        const response = await axios(url, options);
         setData(response.data);
       } catch (err) {
-        setError('Failed to fetch data. Please try again later.');
+        if (err.response) {
+          // Server responded with a status other than 2xx
+          setError(err.response.data.error || err.response.data.message || 'An error occurred');
+        } else if (err.request) {
+          // Request was made but no response received
+          setError('No response from server');
+        } else {
+          // Something else caused the error
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }

@@ -1,4 +1,4 @@
-//notificationRoutes.js
+//routes/notificationRoutes.js
 // Pseudo code for notification routes
 
 const router = require('express').Router();
