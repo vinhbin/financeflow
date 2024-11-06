@@ -17,11 +17,14 @@ const Dashboard = () => {
 
   // Redirect to login if userID is not present
   useEffect(() => {
+    console.log('Dashboard useEffect: userID =', userID);
     if (!userID) {
       console.log('No userID found. Redirecting to login.');
       navigate('/login'); // Correct redirection
+    } else {
+      console.log(`User is authenticated as ${userName}. Staying on Dashboard.`);
     }
-  }, [userID, navigate]);
+  }, [userID, navigate, userName]);
 
   // Fetch data for dashboard conditionally based on userID
   const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(

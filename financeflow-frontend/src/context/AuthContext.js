@@ -1,10 +1,9 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // Create the AuthContext with default values
 export const AuthContext = createContext({
-  isAuthenticated: false,
+  token: null,
   userID: null,
   userName: null,
   login: () => {},
@@ -13,33 +12,31 @@ export const AuthContext = createContext({
 
 // Define the AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
   const [userID, setUserID] = useState(null);
   const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state to handle async initialization
-  const navigate = useNavigate();
 
   // Initialize authentication state from localStorage
   useEffect(() => {
     try {
-      const token = localStorage.getItem('token');
+      const storedToken = localStorage.getItem('token');
       const storedUserID = localStorage.getItem('userID');
       const storedUserName = localStorage.getItem('userName');
 
-      if (token && storedUserID && storedUserName) {
-        setIsAuthenticated(true);
+      if (storedToken && storedUserID && storedUserName) {
+        setToken(storedToken);
         setUserID(storedUserID);
         setUserName(storedUserName);
         console.log('AuthProvider: User is authenticated.');
       } else {
-        setIsAuthenticated(false);
+        setToken(null);
         setUserID(null);
         setUserName(null);
         console.log('AuthProvider: No authenticated user.');
       }
     } catch (error) {
       console.error('AuthProvider: Error accessing localStorage:', error);
-      // Optionally, handle errors (e.g., clear invalid localStorage entries)
     } finally {
       setLoading(false); // Set loading to false after initialization
     }
@@ -52,40 +49,38 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       localStorage.setItem('userID', userID);
       localStorage.setItem('userName', userName);
-      setIsAuthenticated(true);
+      setToken(token);
       setUserID(userID);
       setUserName(userName);
       console.log(`AuthProvider: User logged in with userID: ${userID} and userName: ${userName}`);
     } catch (error) {
       console.error('AuthProvider: Error setting localStorage:', error);
-      // Optionally, handle errors (e.g., notify user)
     }
   };
 
   // Function to handle logout
   const logout = () => {
+    console.log('AuthContext: logout function called.');
     try {
       localStorage.removeItem('token');
       localStorage.removeItem('userID');
       localStorage.removeItem('userName');
-      setIsAuthenticated(false);
+      setToken(null);
       setUserID(null);
       setUserName(null);
       console.log('AuthProvider: User logged out.');
-      navigate('/login'); // Redirect to login page after logout
     } catch (error) {
       console.error('AuthProvider: Error removing from localStorage:', error);
-      // Optionally, handle errors
     }
   };
 
   // If still loading, show a loading indicator
   if (loading) {
-    return <div>Loading...</div>; // You can replace this with a spinner or a more sophisticated loader
+    return <div>Loading...</div>; // Replace with a spinner or a more sophisticated loader if desired
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userID, userName, login, logout }}>
+    <AuthContext.Provider value={{ token, userID, userName, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

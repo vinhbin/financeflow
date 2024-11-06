@@ -1,7 +1,8 @@
-//routes/notificationRoutes.js
-// Pseudo code for notification routes
-
+// routes/notificationRoutes.js
 const router = require('express').Router();
+
+// Import the controller functions
+const { sendNotification, getUserNotifications } = require('../controllers/notificationController');
 
 // Route to send a notification
 router.post('/send', sendNotification);

@@ -25,6 +25,14 @@ const Login = () => {
       const response = await api.post('/api/users/login', { email, password });
       console.log('Login response:', response.data); // Debugging log
 
+      // Check if userID is present
+      if (!response.data.userID) {
+        console.error('userID is missing in the login response.');
+        setMessage('Login failed. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+
       // Use the login function from context to update auth state
       console.log('Using context login function.');
       login(response.data.token, response.data.userID, response.data.name); // Pass name instead of email
@@ -111,6 +119,8 @@ const Login = () => {
       </div>
     </div>
   );
+
+  
 };
 
 export default Login;

@@ -1,0 +1,18 @@
+/* src/components/NotFound.css */
+
+.not-found-container {
+    text-align: center;
+    padding: 100px 20px;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .not-found-container h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .not-found-container p {
+    font-size: 1.5rem;
+  }
+  

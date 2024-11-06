@@ -1,7 +1,8 @@
-//routes/categoryRoutes.js
-// Pseudo code for category routes
-
+// routes/categoryRoutes.js
 const router = require('express').Router();
+
+// Import the controller functions
+const { createCategory, getUserCategories } = require('../controllers/categoryController');
 
 // Route to create a new category
 router.post('/create', createCategory);

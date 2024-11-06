@@ -1,8 +1,9 @@
 // src/components/Layout.js
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import './Layout.css'; // Ensure the import matches the file name
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
     <div className="layout-container">
       {/* Gradient Background */}
@@ -17,7 +18,7 @@ const Layout = ({ children }) => {
       
       {/* Main Content */}
       <div className="content">
-        {children}
+        <Outlet /> {/* Render nested routes here */}
       </div>
     </div>
   );

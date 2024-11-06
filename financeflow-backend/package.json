@@ -19,9 +19,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "mysql2": "^3.11.3",
     "open": "^10.1.0",
     "openai": "^4.68.4",
-    "plaid": "^29.0.0"
+    "plaid": "^29.0.0",
+    "react-plaid-link": "^3.6.1"
   }
 }
