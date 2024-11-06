@@ -7,7 +7,7 @@ const {
   getLinkedAccounts,
   getTransactions,
 } = require('../controllers/plaidController');
-const authenticate = require('../middleware/authenticate');
+const authenticate = require('../middleware/authenticate'); // Ensure this middleware exists
 
 // Route to create a link token
 router.post('/link-token', authenticate, createLinkToken);

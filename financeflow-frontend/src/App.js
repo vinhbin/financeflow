@@ -1,14 +1,14 @@
 // src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
-import Layout from './components/Layout'; // Import Layout
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Register from './components/Register';
-import LinkAccount from './components/LinkAccount';
 import AddExpense from './components/AddExpense';
 import NotFound from './components/NotFound';
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
 
 function App() {
   return (
@@ -25,9 +25,22 @@ function App() {
             <Route path="register" element={<Register />} />
 
             {/* Protected Routes */}
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="link-account" element={<LinkAccount />} />
-            <Route path="add-expense" element={<AddExpense />} />
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="add-expense"
+              element={
+                <ProtectedRoute>
+                  <AddExpense />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Catch-All Route for 404 Page */}
             <Route path="*" element={<NotFound />} />

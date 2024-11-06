@@ -2,37 +2,41 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useFetch = (url, options = {}) => {
+const useFetch = (url, config, trigger = false) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!url); // Set to true if URL is provided
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!url) return; // Skip if no URL
+    if (!url) return;
+
+    let isMounted = true; // To prevent state updates on unmounted components
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios(url, options);
-        setData(response.data);
+        const response = await axios(url, config);
+        if (isMounted) {
+          setData(response.data);
+          setError(null);
+        }
       } catch (err) {
-        if (err.response) {
-          // Server responded with a status other than 2xx
-          setError(err.response.data.error || err.response.data.message || 'An error occurred');
-        } else if (err.request) {
-          // Request was made but no response received
-          setError('No response from server');
-        } else {
-          // Something else caused the error
-          setError(err.message);
+        console.error('useFetch Error:', err.response ? err.response.data : err.message);
+        if (isMounted) {
+          setError(err.response ? err.response.data.error : err.message);
+          setData(null);
         }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, options]);
+
+    return () => {
+      isMounted = false; // Clean up flag on unmount
+    };
+  }, [url, config, trigger]); // Re-run when URL, config, or trigger changes
 
   return { data, loading, error };
 };

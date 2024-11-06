@@ -55,10 +55,12 @@ const exchangePublicToken = asyncHandler(async (req, res) => {
     const accessToken = response.data.access_token;
     const itemID = response.data.item_id;
 
+    // Optionally, fetch account details to get accountName
+    const accountsResponse = await plaidClient.accountsGet({ access_token: accessToken });
+    const accountName = accountsResponse.data.accounts[0]?.name || 'Default Account';
+
     const query = 'INSERT INTO BankAccounts (userID, accessToken, accountName) VALUES (?, ?, ?)';
-    // Assuming accountName is also required; adjust as necessary
-    // You might need to fetch account details from Plaid to get accountName
-    await db.execute(query, [userID, accessToken, 'Default Account']); // Replace 'Default Account' with actual account name if available
+    await db.execute(query, [userID, accessToken, accountName]);
 
     res.status(201).json({ message: 'Bank account linked successfully' });
   } catch (error) {
