@@ -7,6 +7,7 @@ import Card from './Card';
 import PlaidLinkButton from './PlaidLinkButton'; // Import the PlaidLinkButton
 import './Dashboard.css';
 import { getFirstName } from '../utils/nameUtils'; // Import the utility function
+import api from '../utils/api'; // Import the configured Axios instance
 
 const Dashboard = () => {
   console.log('Dashboard component rendered.');
@@ -32,47 +33,43 @@ const Dashboard = () => {
     return userID
       ? {
           method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
         }
       : null;
-  }, [userID, token]);
+  }, [userID]);
 
   const expensesConfig = useMemo(() => {
     return userID
       ? {
           method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
         }
       : null;
-  }, [userID, token]);
+  }, [userID]);
 
   const accountsConfig = useMemo(() => {
     return userID
       ? {
           method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
         }
       : null;
-  }, [userID, token]);
+  }, [userID]);
 
   const transactionsConfig = useMemo(() => {
     return userID
       ? {
           method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
         }
       : null;
-  }, [userID, token]);
+  }, [userID]);
 
   const aiInsightConfig = useMemo(() => {
     return userID
       ? {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          headers: { 'Content-Type': 'application/json' },
           data: { userID },
         }
       : null;
-  }, [userID, token]);
+  }, [userID]);
 
   // Fetch data using the useFetch hook
   const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(
@@ -121,6 +118,17 @@ const Dashboard = () => {
     }
   }, [userID]);
 
+  // Function to unlink an account
+  const unlinkAccount = async (accountId) => {
+    try {
+      await api.delete(`/api/plaid/accounts/${accountId}`); // Use api instead of axios
+      setRefreshData((prev) => !prev); // Trigger data refetch
+    } catch (err) {
+      console.error('Error unlinking account:', err.response?.data || err.message);
+      // Optionally, display an error message to the user
+    }
+  };
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -138,25 +146,29 @@ const Dashboard = () => {
             <p>Loading accounts...</p>
           ) : accountsError ? (
             <p className="error-message">{accountsError}</p>
-          ) : accounts && accounts.message ? (
-            <div>
-              <p>{accounts.message}</p>
-              <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
-            </div>
-          ) : accounts && accounts.accounts ? (
+          ) : accounts && accounts.accounts && accounts.accounts.length > 0 ? (
             <div>
               <ul>
                 {accounts.accounts.map((account) => (
-                  <li key={account.id}>
-                    {account.accountName} - {account.type}
+                  <li key={account.id} className="account-item">
+                    <span>
+                      {account.accountName} - {account.type}
+                    </span>
+                    <button
+                      onClick={() => unlinkAccount(account.id)}
+                      className="link-account-button"
+                    >
+                      Unlink
+                    </button>
                   </li>
                 ))}
               </ul>
-              <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
             </div>
           ) : (
             <p>No linked bank accounts found.</p>
           )}
+          {/* Always render the PlaidLinkButton */}
+          <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
         </Card>
 
         {/* Financial Metrics */}
@@ -185,20 +197,20 @@ const Dashboard = () => {
             <p>Loading transactions...</p>
           ) : transactionsError ? (
             <p className="error-message">{transactionsError}</p>
-          ) : transactions && transactions.message ? (
-            <div>
-              <p>{transactions.message}</p>
-              <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
-            </div>
-          ) : transactions && transactions.transactions ? (
+          ) : transactions && transactions.transactions && transactions.transactions.length > 0 ? (
             <ul>
-              {transactions.transactions.slice(0, 5).map((transaction) => (
+              {transactions.transactions.slice(0, 60).map((transaction) => (
                 <li key={transaction.transactionID}>
                   {transaction.description}: ${transaction.amount} on{' '}
                   {new Date(transaction.date).toLocaleDateString()}
                 </li>
               ))}
             </ul>
+          ) : transactions && transactions.message ? (
+            <div>
+              <p>{transactions.message}</p>
+              <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
+            </div>
           ) : (
             <p>No recent transactions found.</p>
           )}
@@ -210,11 +222,13 @@ const Dashboard = () => {
             <p>Loading insights...</p>
           ) : aiError ? (
             <p className="error-message">{aiError}</p>
+          ) : aiInsight && aiInsight.insight ? (
+            <p>{aiInsight.insight}</p>
           ) : aiInsight && aiInsight.message ? (
             <div>
               <p>{aiInsight.message}</p>
               <button
-                className="generate-insight-button"
+                className="glass-button generate-insight-button"
                 onClick={() => {
                   // Optionally, implement a retry mechanism or re-fetch AI insights
                 }}
@@ -222,8 +236,6 @@ const Dashboard = () => {
                 Generate Insights
               </button>
             </div>
-          ) : aiInsight && aiInsight.insight ? (
-            <p>{aiInsight.insight}</p>
           ) : (
             <p>No AI insights available.</p>
           )}
@@ -237,16 +249,16 @@ const Dashboard = () => {
             <p>Loading expenses...</p>
           ) : expensesError ? (
             <p className="error-message">{expensesError}</p>
-          ) : expenses && expenses.message ? (
-            <p>{expenses.message}</p>
-          ) : expenses && expenses.expenses ? (
+          ) : expenses && expenses.expenses && expenses.expenses.length > 0 ? (
             <ul>
-              {expenses.expenses.slice(0, 5).map((expense) => (
+              {expenses.expenses.slice(0, 60).map((expense) => (
                 <li key={expense.expenseID}>
                   {expense.description}: ${expense.amount} on {expense.date}
                 </li>
               ))}
             </ul>
+          ) : expenses && expenses.message ? (
+            <p>{expenses.message}</p>
           ) : (
             <p>No recent expenses found.</p>
           )}

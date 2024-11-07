@@ -1,10 +1,15 @@
+// config/dbConfig.js
 const mysql = require('mysql2/promise');
+const config = require('./config'); // Adjust the path if necessary
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+  host: config.MYSQLHost,
+  user: config.MYSQLUser,
+  password: config.MYSQLPassword,
+  database: config.MYSQLDatabase,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 module.exports = db;

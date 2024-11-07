@@ -6,6 +6,7 @@ const {
   exchangePublicToken,
   getLinkedAccounts,
   getTransactions,
+  deleteBankAccount,
 } = require('../controllers/plaidController');
 const authenticate = require('../middleware/authenticate'); // Ensure this middleware exists
 
@@ -20,5 +21,8 @@ router.get('/accounts/:userID', authenticate, getLinkedAccounts);
 
 // Route to get transactions for a user
 router.get('/transactions/:userID', authenticate, getTransactions);
+
+// Route to unlink a bank account
+router.delete('/accounts/:accountID', authenticate, deleteBankAccount);
 
 module.exports = router;

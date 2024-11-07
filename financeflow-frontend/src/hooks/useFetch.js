@@ -1,21 +1,21 @@
 // src/hooks/useFetch.js
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api'; // Import the configured Axios instance
 
-const useFetch = (url, config, trigger = false) => {
+const useFetch = (url, config = {}, trigger = false) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(!!url); // Set to true if URL is provided
+  const [loading, setLoading] = useState(!!url); // Initialize as true if URL is provided
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!url) return;
+    if (!url) return; // Exit if no URL is provided
 
-    let isMounted = true; // To prevent state updates on unmounted components
+    let isMounted = true; // Prevent state updates if the component is unmounted
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios(url, config);
+        const response = await api(url, config); // Use the configured Axios instance
         if (isMounted) {
           setData(response.data);
           setError(null);
@@ -34,7 +34,7 @@ const useFetch = (url, config, trigger = false) => {
     fetchData();
 
     return () => {
-      isMounted = false; // Clean up flag on unmount
+      isMounted = false; // Cleanup flag on unmount
     };
   }, [url, config, trigger]); // Re-run when URL, config, or trigger changes
 

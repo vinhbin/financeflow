@@ -1,6 +1,7 @@
 // middleware/authenticate.js
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./asyncHandler');
+const config = require('../config/config'); // Import config
 
 const authenticate = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +10,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
     const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, config.jwtSecret); // Use config.jwtSecret
       req.user = decoded; // Attach user info to request
       next();
     } catch (error) {

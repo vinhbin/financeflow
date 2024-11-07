@@ -43,7 +43,7 @@ const createLinkToken = asyncHandler(async (req, res) => {
   }
 });
 
-// Exchange Public Token
+// Exchange Public Token and Save Transactions
 const exchangePublicToken = asyncHandler(async (req, res) => {
   const { public_token, userID } = req.body;
   if (!public_token || !userID) {
@@ -55,17 +55,68 @@ const exchangePublicToken = asyncHandler(async (req, res) => {
     const accessToken = response.data.access_token;
     const itemID = response.data.item_id;
 
-    // Optionally, fetch account details to get accountName
+    // Fetch account details
     const accountsResponse = await plaidClient.accountsGet({ access_token: accessToken });
-    const accountName = accountsResponse.data.accounts[0]?.name || 'Default Account';
+    const accounts = accountsResponse.data.accounts;
 
-    const query = 'INSERT INTO BankAccounts (userID, accessToken, accountName) VALUES (?, ?, ?)';
-    await db.execute(query, [userID, accessToken, accountName]);
+    // Save each account and its transactions
+    for (const account of accounts) {
+      const accountName = account.name || 'Default Account';
 
-    res.status(201).json({ message: 'Bank account linked successfully' });
+      // Insert account into BankAccounts
+      const [result] = await db.execute(
+        'INSERT INTO BankAccounts (userID, accessToken, accountName) VALUES (?, ?, ?)',
+        [userID, accessToken, accountName]
+      );
+
+      const accountID = result.insertId;
+
+      // Define date range for transactions (e.g., last 60 days)
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(endDate.getDate() - 60);
+
+      // Fetch transactions from Plaid
+      const transactionsResponse = await plaidClient.transactionsGet({
+        access_token: accessToken,
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0],
+        options: {
+          count: 500, // Adjust as needed
+          offset: 0,
+        },
+      });
+
+      const transactions = transactionsResponse.data.transactions;
+
+      // Save transactions to Transactions table
+      for (const txn of transactions) {
+        // Check if the transaction already exists to prevent duplicates
+        const [existingTxn] = await db.execute(
+          'SELECT * FROM Transactions WHERE plaidTransactionID = ?',
+          [txn.transaction_id]
+        );
+
+        if (existingTxn.length === 0) {
+          await db.execute(
+            'INSERT INTO Transactions (accountID, plaidTransactionID, amount, description, category, date) VALUES (?, ?, ?, ?, ?, ?)',
+            [
+              accountID,
+              txn.transaction_id, // Assuming you have a plaidTransactionID field
+              txn.amount,
+              txn.name || 'No Description',
+              txn.category && txn.category.length > 0 ? txn.category[0] : 'Uncategorized',
+              txn.date,
+            ]
+          );
+        }
+      }
+    }
+
+    res.status(201).json({ message: 'Bank account linked successfully and transactions saved' });
   } catch (error) {
-    console.error('Error exchanging public token:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Failed to exchange public token' });
+    console.error('Error exchanging public token and saving transactions:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to exchange public token and save transactions' });
   }
 });
 
@@ -88,41 +139,132 @@ const getLinkedAccounts = asyncHandler(async (req, res) => {
   }
 });
 
-// Get Transactions
+// Get Transactions from Database
 const getTransactions = asyncHandler(async (req, res) => {
   const { userID } = req.params;
+  console.log(`Fetching transactions for userID: ${userID}`); // Debugging
+
   if (!userID) {
     return res.status(400).json({ error: 'userID is required' });
   }
 
   try {
-    const [results] = await db.execute('SELECT accessToken FROM BankAccounts WHERE userID = ?', [userID]);
-    if (!results.length) {
+    // Fetch all bank accounts for the user
+    const [accounts] = await db.execute('SELECT id FROM BankAccounts WHERE userID = ?', [userID]);
+    console.log(`Fetched accounts: ${JSON.stringify(accounts)}`); // Debugging
+
+    if (accounts.length === 0) {
       return res.status(200).json({ message: 'No linked bank account found. Please link a bank account first.' });
     }
 
-    const accessToken = results[0].accessToken;
+    const accountIds = accounts.map(acc => acc.id);
+    console.log(`Account IDs: ${accountIds}`); // Debugging
 
-    // Dynamic Date Range: Last 1 Year
-    const today = new Date();
-    const lastYear = new Date();
-    lastYear.setFullYear(today.getFullYear() - 1);
+    // Dynamically generate placeholders for the IN clause
+    const placeholders = accountIds.map(() => '?').join(',');
+    const query = `SELECT * FROM Transactions WHERE accountID IN (${placeholders}) ORDER BY date DESC LIMIT 60`;
 
-    const response = await plaidClient.transactionsGet({
-      access_token: accessToken,
-      start_date: lastYear.toISOString().split('T')[0],
-      end_date: today.toISOString().split('T')[0],
-    });
+    // Execute the query with accountIds as separate parameters
+    const [transactions] = await db.execute(query, accountIds);
+    console.log(`Fetched transactions: ${JSON.stringify(transactions)}`); // Debugging
 
-    if (response.data.transactions.length === 0) {
-      return res.status(200).json({ message: 'No transactions found for the specified period.' });
-    }
-
-    res.status(200).json({ transactions: response.data.transactions });
-  } catch (error) {
-    console.error('Error fetching transactions from Plaid:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Failed to fetch transactions. Please try again later.' });
+    res.status(200).json({ transactions });
+  } catch (err) {
+    console.error('Error fetching transactions:', err);
+    res.status(500).json({ error: 'Failed to fetch transactions.' });
   }
 });
 
-module.exports = { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions };
+// Unlink a Bank Account
+const deleteBankAccount = asyncHandler(async (req, res) => {
+  const { accountID } = req.params;
+  const { userID } = req.user; // assuming userID is in req.user from authenticate middleware
+
+  if (!accountID) {
+    return res.status(400).json({ error: 'accountID is required' });
+  }
+
+  try {
+    // Verify that the account belongs to the user
+    const [accounts] = await db.execute('SELECT * FROM BankAccounts WHERE id = ? AND userID = ?', [accountID, userID]);
+    if (accounts.length === 0) {
+      return res.status(404).json({ error: 'Bank account not found' });
+    }
+
+    const accessToken = accounts[0].accessToken;
+
+    // Optionally, revoke access token with Plaid if needed
+    // Not implemented here
+
+    // Delete associated transactions
+    await db.execute('DELETE FROM Transactions WHERE accountID = ?', [accountID]);
+
+    // Delete the bank account
+    await db.execute('DELETE FROM BankAccounts WHERE id = ?', [accountID]);
+
+    res.status(200).json({ message: 'Bank account and associated transactions unlinked successfully' });
+  } catch (error) {
+    console.error('Error unlinking bank account:', error);
+    res.status(500).json({ error: 'Failed to unlink bank account' });
+  }
+});
+
+// Update Transactions (Scheduled Task)
+const updateTransactions = asyncHandler(async () => {
+  // Fetch all users
+  const [users] = await db.execute('SELECT userID FROM Users');
+
+  for (const user of users) {
+    const userID = user.userID;
+
+    // Fetch all bank accounts for the user
+    const [accounts] = await db.execute('SELECT id, accessToken FROM BankAccounts WHERE userID = ?', [userID]);
+
+    for (const account of accounts) {
+      const { id: accountID, accessToken } = account;
+
+      // Define date range (e.g., last 60 days)
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(endDate.getDate() - 60);
+
+      // Fetch transactions from Plaid
+      const transactionsResponse = await plaidClient.transactionsGet({
+        access_token: accessToken,
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0],
+        options: {
+          count: 500,
+          offset: 0,
+        },
+      });
+
+      const transactions = transactionsResponse.data.transactions;
+
+      // Save new transactions to the Transactions table
+      for (const txn of transactions) {
+        // Check if the transaction already exists to prevent duplicates
+        const [existingTxn] = await db.execute(
+          'SELECT * FROM Transactions WHERE plaidTransactionID = ?',
+          [txn.transaction_id]
+        );
+
+        if (existingTxn.length === 0) {
+          await db.execute(
+            'INSERT INTO Transactions (accountID, plaidTransactionID, amount, description, category, date) VALUES (?, ?, ?, ?, ?, ?)',
+            [
+              accountID,
+              txn.transaction_id,
+              txn.amount,
+              txn.name || 'No Description',
+              txn.category && txn.category.length > 0 ? txn.category[0] : 'Uncategorized',
+              txn.date,
+            ]
+          );
+        }
+      }
+    }
+  }
+});
+
+module.exports = { createLinkToken, exchangePublicToken, getLinkedAccounts, getTransactions, deleteBankAccount, updateTransactions };

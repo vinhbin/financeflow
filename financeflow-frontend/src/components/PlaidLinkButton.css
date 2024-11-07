@@ -1,0 +1,34 @@
+/* src/components/PlaidLinkButton.css */
+
+/* Reusable Glass Button Style */
+.glass-button {
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+    border-radius: 8px;
+    backdrop-filter: blur(10px); /* Glass effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, border 0.3s ease;
+    margin-top: 10px; /* Space above the button */
+  }
+  
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.3); /* Slightly more opaque on hover */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  
+  /* Specific Style for Plaid Link Button */
+  .plaid-link-button {
+    background-color: #5065F4; /* Plaid's signature blue color */
+    border: none; /* Remove default border */
+    color: #ffffff; /* White text */
+    font-weight: bold; /* Bold text */
+  }
+  
+  .plaid-link-button:hover {
+    background-color: #3e4de4; /* Darker blue on hover */
+  }
+  

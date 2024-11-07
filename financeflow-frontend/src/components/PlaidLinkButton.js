@@ -4,7 +4,7 @@ import axios from 'axios';
 import { usePlaidLink } from 'react-plaid-link';
 import useAuth from '../hooks/useAuth';
 import { API_BASE_URL } from '../config'; // Ensure you have this configured
-//import './PlaidLinkButton.css'; // Optional: Styling for the button
+import './PlaidLinkButton.css'; // Import the CSS file
 
 const PlaidLinkButton = ({ onSuccessCallback }) => {
   const [linkToken, setLinkToken] = useState(null);
@@ -68,7 +68,11 @@ const PlaidLinkButton = ({ onSuccessCallback }) => {
     <div>
       {error && <p className="error-message">{error}</p>}
       {linkToken ? (
-        <button onClick={() => open()} disabled={!ready} className="glass-button plaid-link-button">
+        <button
+          onClick={() => open()}
+          disabled={!ready}
+          className="glass-button plaid-link-button" // Apply both classes
+        >
           Connect Bank Account
         </button>
       ) : (

@@ -15,15 +15,16 @@ const api = axios.create({
   },
 });
 
-// Optional: Add authorization headers if needed
+// Interceptor to include JWT token in headers
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token'); // Ensure token is stored under 'token'
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
+// Optional: Handle responses globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {

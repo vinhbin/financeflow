@@ -4,6 +4,10 @@ const app = express();
 const cors = require('cors');
 const morgan = require('morgan'); // HTTP request logger
 const dotenv = require('dotenv');
+const cron = require('node-cron');
+const plaidController = require('./controllers/plaidController');
+const config = require('./config/config'); // Importing config
+
 dotenv.config();
 
 // Import Routes
@@ -16,7 +20,6 @@ const notificationRoutes = require('./routes/notificationRoutes');
 
 // Import Middleware
 const errorHandler = require('./middleware/errorHandler'); // Centralized error handling
-const authenticate = require('./middleware/authenticate'); // Authentication middleware
 
 // Middleware Configuration
 app.use(cors({
@@ -28,11 +31,11 @@ app.use(morgan('dev')); // Logs all incoming requests in the 'dev' format
 
 // Routes Configuration
 app.use('/api/users', userRoutes);
-app.use('/api/expenses', authenticate, expenseRoutes);
-app.use('/api/plaid', authenticate, plaidRoutes);
-app.use('/api/ai-insights', authenticate, aiInsightsRoutes);
-app.use('/api/categories', authenticate, categoryRoutes);
-app.use('/api/notifications', authenticate, notificationRoutes);
+app.use('/api/plaid', plaidRoutes); // plaidRoutes already include authenticate middleware
+app.use('/api/expenses', expenseRoutes); // expenseRoutes already include authenticate middleware
+app.use('/api/ai-insights', aiInsightsRoutes); // aiInsightsRoutes already include authenticate middleware
+app.use('/api/categories', categoryRoutes); // categoryRoutes already include authenticate middleware
+app.use('/api/notifications', notificationRoutes); // notificationRoutes already include authenticate middleware
 
 // Handle Undefined Routes
 app.use((req, res, next) => {
@@ -43,5 +46,16 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Start the Server
-const PORT = process.env.PORT || 5005;
+const PORT = config.port || 5005;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Schedule the task to run daily at midnight
+cron.schedule('0 0 * * *', async () => {
+  console.log('Running daily transaction update...');
+  try {
+    await plaidController.updateTransactions();
+    console.log('Daily transaction update completed.');
+  } catch (error) {
+    console.error('Error during daily transaction update:', error);
+  }
+});

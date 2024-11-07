@@ -147,6 +147,31 @@
   transform: scale(0.95);
 }
 
+/* Unlink Button Styling */
+.link-account-button {
+  padding: 5px 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e74c3c; /* Red color for unlink */
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.link-account-button:hover {
+  background-color: #c0392b;
+}
+
+/* Account Item Styling */
+.account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .card {
