@@ -40,6 +40,7 @@ const PlaidLinkButton = ({ onSuccessCallback }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Bank account linked successfully:', response.data);
+      
       setError(null);
       if (onSuccessCallback) {
         onSuccessCallback(); // Trigger the callback to refresh accounts

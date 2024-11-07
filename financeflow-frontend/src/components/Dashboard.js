@@ -5,6 +5,7 @@ import useFetch from '../hooks/useFetch';
 import useAuth from '../hooks/useAuth';
 import Card from './Card';
 import PlaidLinkButton from './PlaidLinkButton'; // Import the PlaidLinkButton
+import AddExpense from './AddExpense';// Import the AddExpense component
 import './Dashboard.css';
 import { getFirstName } from '../utils/nameUtils'; // Import the utility function
 import api from '../utils/api'; // Import the configured Axios instance
@@ -77,6 +78,12 @@ const Dashboard = () => {
     metricsConfig,
     refreshData // Pass the trigger
   );
+    // Log the `userID` and `metrics` data for debugging
+    console.log('Dashboard: Fetching metrics for userID:', userID);
+    if (metricsLoading) console.log('Dashboard: Metrics loading...');
+    if (metricsError) console.error('Dashboard: Error fetching metrics:', metricsError);
+    console.log('Dashboard: Fetched metrics data:', metrics);
+  
 
   const { data: expenses, loading: expensesLoading, error: expensesError } = useFetch(
     userID ? `/api/expenses/user/${userID}` : '',
@@ -138,6 +145,8 @@ const Dashboard = () => {
         </button>
       </div>
 
+
+
       {/* Dashboard Rows */}
       <div className="dashboard-row">
         {/* Linked Bank Accounts */}
@@ -171,6 +180,7 @@ const Dashboard = () => {
           <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
         </Card>
 
+
         {/* Financial Metrics */}
         <Card title="Financial Metrics" className="metrics">
           {metricsLoading ? (
@@ -179,9 +189,9 @@ const Dashboard = () => {
             <p className="error-message">{metricsError}</p>
           ) : metrics && metrics.message ? (
             <p>{metrics.message}</p>
-          ) : metrics && metrics.totalExpenses !== undefined && metrics.upcomingSubscriptions !== undefined ? (
+          ) : metrics && metrics.combinedTotal !== undefined && metrics.upcomingSubscriptions !== undefined ? (
             <div>
-              <p>Total Expenses: ${metrics.totalExpenses}</p>
+              <p>Total Expenses: ${metrics.combinedTotal}</p>
               <p>Upcoming Subscriptions: ${metrics.upcomingSubscriptions}</p>
             </div>
           ) : (
@@ -189,6 +199,8 @@ const Dashboard = () => {
           )}
         </Card>
       </div>
+      
+      
 
       <div className="dashboard-row">
         {/* Recent Transactions */}
@@ -262,6 +274,11 @@ const Dashboard = () => {
           ) : (
             <p>No recent expenses found.</p>
           )}
+        </Card>
+
+        {/* Add Expense Card */}
+        <Card title="Add Expense" className="add-expense">
+          <AddExpense />
         </Card>
       </div>
     </div>

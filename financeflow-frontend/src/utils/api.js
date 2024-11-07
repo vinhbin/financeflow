@@ -1,7 +1,7 @@
 // src/utils/api.js
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5005';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5008';
 console.log('API_BASE_URL:', API_BASE_URL); // Debugging log
 
 if (!API_BASE_URL) {

@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import axios from 'axios';
-import './AddExpense.css'; // Create and style this CSS file
+import api from '../utils/api'; // Import the custom API module
+import './AddExpense.css'; // Ensure this CSS file is created and styled
 
 const AddExpense = () => {
-  const { userID, token } = useAuth();
+  const { userID } = useAuth(); // Ensure `token` is handled via `api.js` interceptor
   const navigate = useNavigate();
 
   const [amount, setAmount] = useState('');
@@ -24,27 +24,30 @@ const AddExpense = () => {
       return;
     }
 
+    console.log('Preparing to send expense data:', { userID, amount, description, categoryID }); // Debugging log
+
     try {
-      const response = await axios.post(
-        '/api/expenses/create',
-        { userID, amount, description, categoryID },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await api.post('/api/expenses/create', {
+        userID,
+        amount,
+        description,
+        categoryID,
+      });
+
+      console.log('Response from server:', response.data); // Debugging log
 
       if (response.data.message === 'Expense added successfully') {
         setSuccess('Expense added successfully!');
         setError('');
-        // Optionally, reset form fields
         setAmount('');
         setDescription('');
         setCategoryID('');
-        // Redirect to Dashboard after a short delay
         setTimeout(() => {
           navigate('/dashboard');
         }, 2000);
       }
     } catch (err) {
-      console.error('Error adding expense:', err.response?.data || err.message);
+      console.error('Error adding expense:', err.response || err.message);
       setError(err.response?.data?.error || 'Failed to add expense.');
       setSuccess('');
     }
@@ -84,7 +87,6 @@ const AddExpense = () => {
           required
         >
           <option value="">Select Category</option>
-          {/* Fetch categories from backend or define them statically */}
           <option value="1">Food</option>
           <option value="2">Transportation</option>
           <option value="3">Utilities</option>

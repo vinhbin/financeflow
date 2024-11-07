@@ -23,7 +23,7 @@ const errorHandler = require('./middleware/errorHandler'); // Centralized error 
 
 // Middleware Configuration
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: 'http://localhost:3002', // Replace with your frontend URL
   credentials: true,
 }));
 app.use(express.json());
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Start the Server
-const PORT = config.port || 5005;
+const PORT = config.port || 5008;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Schedule the task to run daily at midnight
