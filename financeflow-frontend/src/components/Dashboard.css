@@ -7,12 +7,18 @@
   padding: 0;
 }
 
+/* CSS variable for card width */
+:root {
+  --card-width: 450px; /* Adjust this value to change the width of all cards */
+}
+
 /* Container for the dashboard */
 .dashboard {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
   font-family: Arial, sans-serif;
+  color: #ffffff; /* Ensure text is white for visibility */
 }
 
 /* Dashboard Header */
@@ -61,58 +67,31 @@
 /* Layout rows */
 .dashboard-row {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-wrap: wrap; /* Allow cards to wrap to the next line if needed */
+  justify-content: center; /* Center the cards */
   margin-bottom: 20px;
 }
 
-/* Card Styles */
-.card {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  width: 48%;
-  font-size: 1.1rem;
-  margin: 10px 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+.dashboard-row > .card {
+  flex: 0 0 var(--card-width); /* flex-grow: 0; flex-shrink: 0; flex-basis: var(--card-width); */
+  width: var(--card-width);
+  margin: 10px;
+  box-sizing: border-box;
 }
 
-.card h3 {
-  color: #ffffff;
-  margin-bottom: 10px;
+/* Adjustments for small screens */
+@media (max-width: 768px) {
+  .dashboard-row > .card {
+    flex-basis: calc(50% - 20px); /* Two cards per row */
+    width: calc(50% - 20px);
+  }
 }
 
-.card p,
-.card li {
-  color: #ffffff;
-}
-
-.card ul {
-  list-style: none;
-  padding: 0;
-}
-
-.card p {
-  margin: 10px 0;
-}
-
-/* Specific card classes */
-.metrics,
-.bank-accounts,
-.transactions,
-.ai-insight,
-.expenses {
-  width: 48%;
-}
-
-/* Full-width for certain cards */
-.expenses {
-  width: 100%;
-  margin-top: 20px;
+@media (max-width: 500px) {
+  .dashboard-row > .card {
+    flex-basis: calc(100% - 20px); /* One card per row */
+    width: calc(100% - 20px);
+  }
 }
 
 /* Error Message Styling */
@@ -148,7 +127,7 @@
 }
 
 /* Unlink Button Styling */
-.link-account-button {
+.unlink-button {
   padding: 5px 10px;
   margin-left: 10px;
   border: none;
@@ -159,7 +138,7 @@
   transition: background 0.3s ease;
 }
 
-.link-account-button:hover {
+.unlink-button:hover {
   background-color: #c0392b;
 }
 
@@ -170,11 +149,187 @@
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  word-break: break-word; /* Break long words if necessary */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .card {
-    width: 100%;
+/* Limit the height of account list */
+.account-list {
+  max-height: 200px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+/* Spinner Styles */
+.spinner {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Optional: Additional styles for lists */
+.account-list,
+.transaction-list,
+.expense-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-item,
+.transaction-item,
+.expense-item {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Expense and Transaction Item Styling */
+.expense-row,
+.transaction-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-description,
+.transaction-description {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.expense-date,
+.transaction-date {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.expense-details,
+.transaction-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.expense-category,
+.transaction-category {
+  font-size: 0.8rem;
+  color: #cccccc;
+}
+
+.expense-amount,
+.transaction-amount {
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+/* Financial Metrics Styles */
+.metrics-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  flex: 1 1 100px;
+  box-sizing: border-box;
+}
+
+.metric-label {
+  font-size: 0.9em;
+  color: #cccccc; /* Adjust color for the label */
+  white-space: nowrap; /* Prevent label from wrapping */
+}
+
+.metric-amount {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ffffff; /* Adjust color for the amount */
+  margin-top: 5px; /* Space between label and amount */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Expense Item Styles */
+.expense-item {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.expense-item .expense-content {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.expense-item .expense-info {
+  flex: 1;
+}
+
+.expense-item.shifted .expense-content {
+  transform: translateX(-50px); /* Adjust as needed */
+}
+
+.expense-item.shifted {
+  /* Adjust padding to accommodate the delete button */
+  padding-right: 60px; /* Adjust to match the shift amount + delete button width */
+}
+
+.expense-delete-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure delete button is only visible when shifted */
+.expense-delete-button {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.expense-item.shifted .expense-delete-button {
+  opacity: 1;
+}
+
+/* Arrow Icon Styling */
+.expense-arrow {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1.2em;
+}
+
+/* Adjust the position of the arrow to be on the right */
+.expense-item .expense-arrow {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+/* Adjustments for mobile responsiveness */
+@media (max-width: 500px) {
+  .expense-item.shifted .expense-content {
+    transform: translateX(-40px); /* Less shift on smaller screens */
+  }
+
+  .expense-delete-button {
+    width: 25px;
+    height: 25px;
+    right: 5px;
   }
 }

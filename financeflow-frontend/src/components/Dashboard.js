@@ -4,19 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import useFetch from '../hooks/useFetch';
 import useAuth from '../hooks/useAuth';
 import Card from './Card';
-import PlaidLinkButton from './PlaidLinkButton'; // Import the PlaidLinkButton
-import AddExpense from './AddExpense';// Import the AddExpense component
+import PlaidLinkButton from './PlaidLinkButton';
+import AddExpense from './AddExpense';
+import ExpenseItem from './ExpenseItem'; // Import the new ExpenseItem component
 import './Dashboard.css';
-import { getFirstName } from '../utils/nameUtils'; // Import the utility function
-import api from '../utils/api'; // Import the configured Axios instance
+import { getFirstName } from '../utils/nameUtils';
+import api from '../utils/api';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
-  console.log('Dashboard component rendered.');
+  console.log('Dashboard: Rendering component.');
   const { userID, userName, token, logout } = useAuth();
   const navigate = useNavigate();
   const [refreshData, setRefreshData] = useState(false); // State to trigger refetching data
 
   const firstName = getFirstName(userName);
+
+  console.log('Dashboard: userID =', userID);
+  console.log('Dashboard: token =', token);
 
   // Redirect to login if userID is not present
   useEffect(() => {
@@ -29,15 +36,12 @@ const Dashboard = () => {
     }
   }, [userID, navigate, userName]);
 
-  // Memoize configuration objects to prevent unnecessary re-fetching
-  const metricsConfig = useMemo(() => {
-    return userID
-      ? {
-          method: 'GET',
-        }
-      : null;
-  }, [userID]);
+  // Function to refresh expenses data
+  const refreshExpenses = () => {
+    setRefreshData((prev) => !prev);
+  };
 
+  // Memoize configuration objects to prevent unnecessary re-fetching
   const expensesConfig = useMemo(() => {
     return userID
       ? {
@@ -73,54 +77,64 @@ const Dashboard = () => {
   }, [userID]);
 
   // Fetch data using the useFetch hook
-  const { data: metrics, loading: metricsLoading, error: metricsError } = useFetch(
-    userID ? `/api/expenses/metrics/${userID}` : '',
-    metricsConfig,
-    refreshData // Pass the trigger
-  );
-    // Log the `userID` and `metrics` data for debugging
-    console.log('Dashboard: Fetching metrics for userID:', userID);
-    if (metricsLoading) console.log('Dashboard: Metrics loading...');
-    if (metricsError) console.error('Dashboard: Error fetching metrics:', metricsError);
-    console.log('Dashboard: Fetched metrics data:', metrics);
-  
-
-  const { data: expenses, loading: expensesLoading, error: expensesError } = useFetch(
+  const { data: expenses, isLoading: expensesLoading, error: expensesError } = useFetch(
     userID ? `/api/expenses/user/${userID}` : '',
     expensesConfig,
     refreshData // Pass the trigger
   );
 
-  const { data: accounts, loading: accountsLoading, error: accountsError } = useFetch(
+  const { data: accounts, isLoading: accountsLoading, error: accountsError } = useFetch(
     userID ? `/api/plaid/accounts/${userID}` : '',
     accountsConfig,
     refreshData // Pass the trigger
   );
 
-  const { data: transactions, loading: transactionsLoading, error: transactionsError } = useFetch(
+  const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useFetch(
     userID ? `/api/plaid/transactions/${userID}` : '',
     transactionsConfig,
     refreshData // Pass the trigger
   );
 
-  const { data: aiInsight, loading: aiLoading, error: aiError } = useFetch(
+  const { data: aiInsight, isLoading: aiLoading, error: aiError } = useFetch(
     userID ? `/api/ai-insights/generate` : '',
     aiInsightConfig
     // Not passing refreshData here as AI insights might not need to be fetched periodically
   );
 
+  // Add logs for fetched data
+  useEffect(() => {
+    console.log('Dashboard: Fetched expenses data:', expenses);
+  }, [expenses]);
+
+  useEffect(() => {
+    console.log('Dashboard: Fetched accounts data:', accounts);
+  }, [accounts]);
+
+  useEffect(() => {
+    console.log('Dashboard: Fetched transactions data:', transactions);
+  }, [transactions]);
+
+  useEffect(() => {
+    console.log('Dashboard: Fetched AI insight:', aiInsight);
+  }, [aiInsight]);
+
   // Set up an interval to refresh data every minute
   useEffect(() => {
     const interval = setInterval(() => {
+      console.log('Dashboard: Interval triggered, toggling refreshData.');
       setRefreshData((prev) => !prev); // Toggle to trigger re-fetch
     }, 60000); // 60000 milliseconds = 1 minute
 
-    return () => clearInterval(interval); // Clean up on unmount
+    return () => {
+      console.log('Dashboard: Clearing interval.');
+      clearInterval(interval); // Clean up on unmount
+    };
   }, []);
 
   // Initial data fetch when the user logs in
   useEffect(() => {
     if (userID) {
+      console.log('Dashboard: Initial data fetch triggered.');
       setRefreshData((prev) => !prev);
     }
   }, [userID]);
@@ -128,160 +142,304 @@ const Dashboard = () => {
   // Function to unlink an account
   const unlinkAccount = async (accountId) => {
     try {
+      console.log(`Dashboard: Attempting to unlink account ID ${accountId}`);
       await api.delete(`/api/plaid/accounts/${accountId}`); // Use api instead of axios
+      console.log(`Dashboard: Successfully unlinked account ID ${accountId}`);
+      toast.success('Account unlinked successfully!');
       setRefreshData((prev) => !prev); // Trigger data refetch
     } catch (err) {
-      console.error('Error unlinking account:', err.response?.data || err.message);
-      // Optionally, display an error message to the user
+      console.error('Dashboard: Error unlinking account:', err.response?.data || err.message);
+      toast.error(`Error unlinking account: ${err.response?.data?.error || err.message}`);
     }
   };
 
+  // Function to delete an expense
+  const handleDeleteExpense = async (expenseID) => {
+    try {
+      console.log(`Deleting expense with ID ${expenseID}`);
+      await api.delete(`/api/expenses/${expenseID}`);
+      toast.success('Expense deleted successfully!');
+      // Trigger data refetch
+      setRefreshData((prev) => !prev);
+    } catch (err) {
+      console.error('Error deleting expense:', err.response?.data || err.message);
+      toast.error(`Error deleting expense: ${err.response?.data?.error || err.message}`);
+    }
+  };
+
+  // Map of category IDs to category names
+  const categories = {
+    1: 'Food',
+    2: 'Transportation',
+    3: 'Utilities',
+    4: 'Entertainment',
+    5: 'Health',
+    6: 'Other',
+    // Add more categories if needed
+  };
+
+  const currencySymbol = (currencyCode) => {
+    switch (currencyCode) {
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      case 'GBP':
+        return '£';
+      // Add more currencies as needed
+      default:
+        return '$';
+    }
+  };
+
+  // State variables for totals
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [combinedTotal, setCombinedTotal] = useState(0);
+
+  // Calculate totals when expenses or transactions data changes
+  useEffect(() => {
+    // Only proceed if we have expenses and transactions data
+    if (!expenses || !transactions) {
+      return;
+    }
+
+    // Calculate total expenses from expenses data
+    let expensesTotal = 0;
+    if (expenses.expenses && expenses.expenses.length > 0) {
+      expensesTotal = expenses.expenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
+    }
+
+    // Calculate total income and expenses from transactions data
+    let transactionsIncome = 0;
+    let transactionsExpenses = 0;
+    if (transactions.transactions && transactions.transactions.length > 0) {
+      transactions.transactions.forEach((transaction) => {
+        const amount = parseFloat(transaction.amount);
+        if (amount < 0) {
+          transactionsIncome += -amount; // Income (negative amounts)
+        } else {
+          transactionsExpenses += amount; // Expenses (positive amounts)
+        }
+      });
+    }
+
+    // Calculate new totals
+    const newTotalExpenses = expensesTotal + transactionsExpenses;
+    const newTotalIncome = transactionsIncome;
+    const newCombinedTotal = newTotalIncome - newTotalExpenses;
+
+    // Update state variables only if the values have changed
+    if (totalExpenses !== newTotalExpenses) {
+      setTotalExpenses(newTotalExpenses);
+    }
+    if (totalIncome !== newTotalIncome) {
+      setTotalIncome(newTotalIncome);
+    }
+    if (combinedTotal !== newCombinedTotal) {
+      setCombinedTotal(newCombinedTotal);
+    }
+  }, [expenses, transactions]);
+
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h2>Welcome, {firstName}!</h2>
-        <button className="logout-button" onClick={logout}>
-          Logout
-        </button>
-      </div>
+    <>
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <h2>Welcome, {firstName}!</h2>
+          <button className="logout-button" onClick={logout}>
+            Logout
+          </button>
+        </div>
 
+        {/* Dashboard Rows */}
+        <div className="dashboard-row">
+          {/* Linked Bank Accounts */}
+          <Card title="Linked Bank Accounts" className="bank-accounts card">
+            {!accounts && accountsLoading ? (
+              <p>Loading accounts...</p>
+            ) : accountsError ? (
+              <p className="error-message">{accountsError}</p>
+            ) : accounts && accounts.accounts && accounts.accounts.length > 0 ? (
+              <div>
+                <TransitionGroup component="ul" className="account-list">
+                  {accounts.accounts.map((account) => (
+                    <CSSTransition key={account.id} timeout={300} classNames="account">
+                      <li className="account-item">
+                        <span>
+                          {account.accountName} - {account.type}
+                        </span>
+                        <button
+                          onClick={() => unlinkAccount(account.id)}
+                          className="unlink-button"
+                          aria-label={`Unlink account ${account.accountName}`}
+                        >
+                          Unlink
+                        </button>
+                      </li>
+                    </CSSTransition>
+                  ))}
+                </TransitionGroup>
+                {/* No "Loading..." message during refetch if data is present */}
+              </div>
+            ) : (
+              <p>No linked bank accounts found.</p>
+            )}
+            {/* Always render the PlaidLinkButton */}
+            <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
+          </Card>
 
+          {/* Financial Metrics */}
+          <Card title="Financial Metrics" className="metrics card">
+            {expensesError || transactionsError ? (
+              <p className="error-message">Error fetching financial metrics.</p>
+            ) : (
+              <div className="metrics-container">
+                <div className="metric-item">
+                  <span className="metric-label">Total Expenses</span>
+                  <span className="metric-amount">
+                    {currencySymbol('USD')}
+                    {totalExpenses.toFixed(2)}
+                  </span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Total Income</span>
+                  <span className="metric-amount">
+                    {currencySymbol('USD')}
+                    {totalIncome.toFixed(2)}
+                  </span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Net Total</span>
+                  <span className="metric-amount">
+                    {currencySymbol('USD')}
+                    {combinedTotal.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            )}
+          </Card>
+        </div>
 
-      {/* Dashboard Rows */}
-      <div className="dashboard-row">
-        {/* Linked Bank Accounts */}
-        <Card title="Linked Bank Accounts" className="bank-accounts">
-          {accountsLoading ? (
-            <p>Loading accounts...</p>
-          ) : accountsError ? (
-            <p className="error-message">{accountsError}</p>
-          ) : accounts && accounts.accounts && accounts.accounts.length > 0 ? (
-            <div>
-              <ul>
-                {accounts.accounts.map((account) => (
-                  <li key={account.id} className="account-item">
-                    <span>
-                      {account.accountName} - {account.type}
-                    </span>
-                    <button
-                      onClick={() => unlinkAccount(account.id)}
-                      className="link-account-button"
-                    >
-                      Unlink
-                    </button>
-                  </li>
+        <div className="dashboard-row">
+          {/* Recent Transactions */}
+          <Card title="Recent Transactions" className="transactions card">
+            {transactionsLoading && !transactions ? (
+              <p>Loading transactions...</p>
+            ) : transactionsError ? (
+              <p className="error-message">{transactionsError}</p>
+            ) : transactions && transactions.transactions && transactions.transactions.length > 0 ? (
+              <TransitionGroup component="ul" className="transaction-list">
+                {transactions.transactions.slice(0, 60).map((transaction) => (
+                  <CSSTransition key={transaction.transactionID} timeout={300} classNames="transaction">
+                    <li key={transaction.transactionID} className="transaction-item">
+                      <div className="transaction-row">
+                        <span className="transaction-description">{transaction.description}</span>
+                        <span className="transaction-date">
+                          {new Date(transaction.date).toLocaleDateString('en-US', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: '2-digit',
+                          })}
+                        </span>
+                      </div>
+                      <div className="transaction-details">
+                        <span className="transaction-category">{transaction.category || 'Unknown Category'}</span>
+                        <span className="transaction-amount">
+                          {currencySymbol(transaction.currency || 'USD')}
+                          {Number(transaction.amount).toFixed(2)}
+                        </span>
+                      </div>
+                    </li>
+                  </CSSTransition>
                 ))}
-              </ul>
-            </div>
-          ) : (
-            <p>No linked bank accounts found.</p>
-          )}
-          {/* Always render the PlaidLinkButton */}
-          <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
-        </Card>
+              </TransitionGroup>
+            ) : transactions && transactions.message ? (
+              <div>
+                <p>{transactions.message}</p>
+                <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
+              </div>
+            ) : (
+              <p>No recent transactions found.</p>
+            )}
+            {/* No "Loading..." message during refetch if data is present */}
+          </Card>
 
+          {/* AI Financial Insight */}
+          <Card title="AI Financial Insight" className="ai-insight card">
+            {aiLoading ? (
+              <p>Loading insights...</p>
+            ) : aiError ? (
+              <p className="error-message">{aiError}</p>
+            ) : aiInsight && aiInsight.insight ? (
+              <p>{aiInsight.insight}</p>
+            ) : aiInsight && aiInsight.message ? (
+              <div>
+                <p>{aiInsight.message}</p>
+                <button
+                  className="generate-insight-button"
+                  onClick={() => {
+                    // Implement a retry mechanism or re-fetch AI insights
+                    setRefreshData((prev) => !prev); // Trigger AI insight re-fetch
+                  }}
+                >
+                  Generate Insights
+                </button>
+              </div>
+            ) : (
+              <p>No AI insights available.</p>
+            )}
+          </Card>
+        </div>
 
-        {/* Financial Metrics */}
-        <Card title="Financial Metrics" className="metrics">
-          {metricsLoading ? (
-            <p>Loading metrics...</p>
-          ) : metricsError ? (
-            <p className="error-message">{metricsError}</p>
-          ) : metrics && metrics.message ? (
-            <p>{metrics.message}</p>
-          ) : metrics && metrics.combinedTotal !== undefined && metrics.upcomingSubscriptions !== undefined ? (
-            <div>
-              <p>Total Expenses: ${metrics.combinedTotal}</p>
-              <p>Upcoming Subscriptions: ${metrics.upcomingSubscriptions}</p>
-            </div>
-          ) : (
-            <p>No financial metrics available.</p>
-          )}
-        </Card>
+        <div className="dashboard-row">
+          {/* Recent Expenses */}
+          <Card title="Recent Expenses" className="expenses card">
+            {expensesLoading && !expenses ? (
+              <p>Loading expenses...</p>
+            ) : expensesError ? (
+              <p className="error-message">{expensesError}</p>
+            ) : expenses && expenses.expenses && expenses.expenses.length > 0 ? (
+              <TransitionGroup component="ul" className="expense-list">
+                {expenses.expenses.slice(0, 60).map((expense) => (
+                  <CSSTransition key={expense.expenseID} timeout={300} classNames="expense">
+                    <ExpenseItem
+                      key={expense.expenseID}
+                      expense={expense}
+                      categories={categories}
+                      currencySymbol={currencySymbol}
+                      onDelete={handleDeleteExpense}
+                    />
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
+            ) : expenses && expenses.message ? (
+              <p>{expenses.message}</p>
+            ) : (
+              <p>No recent expenses found.</p>
+            )}
+          </Card>
+
+          {/* Add Expense Card */}
+          <Card title="Add Expense" className="add-expense card">
+            <AddExpense onExpenseAdded={refreshExpenses} />
+          </Card>
+        </div>
       </div>
-      
-      
-
-      <div className="dashboard-row">
-        {/* Recent Transactions */}
-        <Card title="Recent Transactions" className="transactions">
-          {transactionsLoading ? (
-            <p>Loading transactions...</p>
-          ) : transactionsError ? (
-            <p className="error-message">{transactionsError}</p>
-          ) : transactions && transactions.transactions && transactions.transactions.length > 0 ? (
-            <ul>
-              {transactions.transactions.slice(0, 60).map((transaction) => (
-                <li key={transaction.transactionID}>
-                  {transaction.description}: ${transaction.amount} on{' '}
-                  {new Date(transaction.date).toLocaleDateString()}
-                </li>
-              ))}
-            </ul>
-          ) : transactions && transactions.message ? (
-            <div>
-              <p>{transactions.message}</p>
-              <PlaidLinkButton onSuccessCallback={() => setRefreshData((prev) => !prev)} />
-            </div>
-          ) : (
-            <p>No recent transactions found.</p>
-          )}
-        </Card>
-
-        {/* AI Financial Insight */}
-        <Card title="AI Financial Insight" className="ai-insight">
-          {aiLoading ? (
-            <p>Loading insights...</p>
-          ) : aiError ? (
-            <p className="error-message">{aiError}</p>
-          ) : aiInsight && aiInsight.insight ? (
-            <p>{aiInsight.insight}</p>
-          ) : aiInsight && aiInsight.message ? (
-            <div>
-              <p>{aiInsight.message}</p>
-              <button
-                className="glass-button generate-insight-button"
-                onClick={() => {
-                  // Optionally, implement a retry mechanism or re-fetch AI insights
-                }}
-              >
-                Generate Insights
-              </button>
-            </div>
-          ) : (
-            <p>No AI insights available.</p>
-          )}
-        </Card>
-      </div>
-
-      <div className="dashboard-row">
-        {/* Recent Expenses */}
-        <Card title="Recent Expenses" className="expenses">
-          {expensesLoading ? (
-            <p>Loading expenses...</p>
-          ) : expensesError ? (
-            <p className="error-message">{expensesError}</p>
-          ) : expenses && expenses.expenses && expenses.expenses.length > 0 ? (
-            <ul>
-              {expenses.expenses.slice(0, 60).map((expense) => (
-                <li key={expense.expenseID}>
-                  {expense.description}: ${expense.amount} on {expense.date}
-                </li>
-              ))}
-            </ul>
-          ) : expenses && expenses.message ? (
-            <p>{expenses.message}</p>
-          ) : (
-            <p>No recent expenses found.</p>
-          )}
-        </Card>
-
-        {/* Add Expense Card */}
-        <Card title="Add Expense" className="add-expense">
-          <AddExpense />
-        </Card>
-      </div>
-    </div>
+      {/* Toast Container for Notifications */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastClassName="custom-toast"
+        containerClassName="custom-toast-container"
+      />
+    </>
   );
 };
 

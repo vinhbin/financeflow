@@ -1,14 +1,17 @@
 /* src/components/Card.css */
 
 .card {
-  /* Allow parent styles to override if necessary */
-  /* If default styles are needed, set a complementary background */
-  background: rgba(0, 0, 0, 0.5); /* Optional: Default dark background */
+  background: rgba(0, 0, 0, 0.5); /* Default dark background */
   border: 1px solid rgba(255, 255, 255, 0.2); /* Semi-transparent border */
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
   color: #ffffff; /* White text */
+  /* Removed flex property to prevent conflict with Dashboard.css */
+  min-width: 300px; /* Set a minimum width */
+  max-width: 600px; /* Set a maximum width */
+  margin: 10px;
+  box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 .card h3 {

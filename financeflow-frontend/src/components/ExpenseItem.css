@@ -1,0 +1,79 @@
+/* src/components/ExpenseItem.css */
+
+.expense-item {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .expense-item .expense-content {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .expense-item .expense-info {
+    flex: 1;
+  }
+  
+  .expense-item.shifted .expense-content {
+    transform: translateX(-50px); /* Adjust as needed */
+  }
+  
+  .expense-item.shifted {
+    /* Adjust padding to accommodate the delete button */
+    padding-right: 60px; /* Adjust to match the shift amount + delete button width */
+  }
+  
+  /* Arrow Icon Styling */
+  .expense-arrow {
+    cursor: pointer;
+    margin-left: 0;
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+  
+  .expense-item .expense-arrow {
+    order: 2; /* Place arrow after the expense info */
+  }
+  
+  /* Delete Button Styling */
+  .expense-delete-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* Disable pointer events when hidden */
+  }
+  
+  .expense-item.shifted .expense-delete-button {
+    opacity: 1;
+    pointer-events: auto; /* Enable pointer events when visible */
+  }
+  
+  /* Adjustments for mobile responsiveness */
+  @media (max-width: 500px) {
+    .expense-item.shifted .expense-content {
+      transform: translateX(-40px); /* Less shift on smaller screens */
+    }
+  
+    .expense-delete-button {
+      width: 25px;
+      height: 25px;
+      right: 5px;
+    }
+  }
+  

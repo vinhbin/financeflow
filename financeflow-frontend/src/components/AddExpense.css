@@ -1,75 +1,140 @@
 /* src/components/AddExpense.css */
 
-.add-expense-container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-  }
-  
-  .add-expense-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #ffffff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  }
-  
+/* Style the form to match the card's design */
+.add-expense-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels Styling */
+.add-expense-form label {
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #ffffff; /* White text for labels */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Input and Select Fields Styling */
+.add-expense-form input,
+.add-expense-form select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: rgba(64, 64, 64, 0.8); /* Dark grey background */
+  color: #ffffff; /* White text */
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px); /* Adds a slight blur to the background */
+  -webkit-backdrop-filter: blur(5px); /* For Safari */
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Placeholder Text Styling */
+.add-expense-form input::placeholder,
+.add-expense-form select::placeholder {
+  color: #ffffff; /* White placeholder text */
+  opacity: 0.7;
+}
+
+/* Focus States for Inputs and Selects */
+.add-expense-form input:focus,
+.add-expense-form select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.7); /* White glow on focus */
+}
+
+/* Amount Input Container */
+.amount-input-container {
+  position: relative;
+  width: 100%; /* Ensure full width */
+  margin-bottom: 15px;
+}
+
+.currency-selector {
+  position: absolute;
+  left: 10px;
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.currency-arrow {
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+
+.currency-dropdown {
+  position: absolute;
+  top: 100%; /* Below the currency selector */
+  left: 0;
+  background: rgba(64, 64, 64, 0.9); /* Dark grey background */
+  border-radius: 8px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 5px 0 0 0;
+  z-index: 3;
+  width: 120px; /* Adjust as needed */
+}
+
+.currency-dropdown li {
+  padding: 5px 10px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.currency-dropdown li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Adjust the amount input to accommodate the currency symbol */
+.amount-input {
+  padding-left: 50px; /* Add space for currency symbol */
+  text-align: right; /* Right-align the numbers */
+  width: 100%; /* Ensure full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Submit Button Styling */
+.glass-button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(128, 128, 128, 0.6); /* Greyish semi-transparent background */
+  color: #ffffff; /* White text */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.glass-button:hover {
+  background: rgba(128, 128, 128, 0.8); /* Darker grey on hover */
+  transform: scale(1.05);
+}
+
+.glass-button:active {
+  transform: scale(0.95);
+}
+
+/* Error Message Styling */
+.error-message {
+  color: #e74c3c; /* Red color for errors */
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .add-expense-form {
-    display: flex;
-    flex-direction: column;
+    width: 100%;
   }
-  
-  .add-expense-form label {
-    margin-bottom: 5px;
-    font-size: 1rem;
-  }
-  
-  .add-expense-form input,
-  .add-expense-form select {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-  }
-  
-  .submit-button {
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #2ecc71;
-    color: #ffffff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .submit-button:hover {
-    background: #27ae60;
-    transform: scale(1.05);
-  }
-  
-  .submit-button:active {
-    transform: scale(0.95);
-  }
-  
-  .error-message {
-    color: #e74c3c;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .success-message {
-    color: #2ecc71;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
+}

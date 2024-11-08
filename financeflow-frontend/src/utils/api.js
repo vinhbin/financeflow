@@ -1,7 +1,7 @@
 // src/utils/api.js
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5008';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5005';
 console.log('API_BASE_URL:', API_BASE_URL); // Debugging log
 
 if (!API_BASE_URL) {
@@ -13,6 +13,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10 seconds timeout to prevent hanging requests
 });
 
 // Interceptor to include JWT token in headers

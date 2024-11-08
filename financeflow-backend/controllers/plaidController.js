@@ -211,59 +211,64 @@ const deleteBankAccount = asyncHandler(async (req, res) => {
 
 // Update Transactions (Scheduled Task)
 const updateTransactions = asyncHandler(async () => {
-  // Fetch all users
-  const [users] = await db.execute('SELECT userID FROM Users');
+  try {
+    // Fetch all users
+    const [users] = await db.execute('SELECT userID FROM Users');
 
-  for (const user of users) {
-    const userID = user.userID;
+    for (const user of users) {
+      const userID = user.userID;
 
-    // Fetch all bank accounts for the user
-    const [accounts] = await db.execute('SELECT id, accessToken FROM BankAccounts WHERE userID = ?', [userID]);
+      // Fetch all bank accounts for the user
+      const [accounts] = await db.execute('SELECT id, accessToken FROM BankAccounts WHERE userID = ?', [userID]);
 
-    for (const account of accounts) {
-      const { id: accountID, accessToken } = account;
+      for (const account of accounts) {
+        const { id: accountID, accessToken } = account;
 
-      // Define date range (e.g., last 60 days)
-      const endDate = new Date();
-      const startDate = new Date();
-      startDate.setDate(endDate.getDate() - 60);
+        // Define date range (e.g., last 60 days)
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - 60);
 
-      // Fetch transactions from Plaid
-      const transactionsResponse = await plaidClient.transactionsGet({
-        access_token: accessToken,
-        start_date: startDate.toISOString().split('T')[0],
-        end_date: endDate.toISOString().split('T')[0],
-        options: {
-          count: 500,
-          offset: 0,
-        },
-      });
+        // Fetch transactions from Plaid
+        const transactionsResponse = await plaidClient.transactionsGet({
+          access_token: accessToken,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endDate.toISOString().split('T')[0],
+          options: {
+            count: 500,
+            offset: 0,
+          },
+        });
 
-      const transactions = transactionsResponse.data.transactions;
+        const transactions = transactionsResponse.data.transactions;
 
-      // Save new transactions to the Transactions table
-      for (const txn of transactions) {
-        // Check if the transaction already exists to prevent duplicates
-        const [existingTxn] = await db.execute(
-          'SELECT * FROM Transactions WHERE plaidTransactionID = ?',
-          [txn.transaction_id]
-        );
-
-        if (existingTxn.length === 0) {
-          await db.execute(
-            'INSERT INTO Transactions (accountID, plaidTransactionID, amount, description, category, date) VALUES (?, ?, ?, ?, ?, ?)',
-            [
-              accountID,
-              txn.transaction_id,
-              txn.amount,
-              txn.name || 'No Description',
-              txn.category && txn.category.length > 0 ? txn.category[0] : 'Uncategorized',
-              txn.date,
-            ]
+        // Save new transactions to the Transactions table
+        for (const txn of transactions) {
+          // Check if the transaction already exists to prevent duplicates
+          const [existingTxn] = await db.execute(
+            'SELECT * FROM Transactions WHERE plaidTransactionID = ?',
+            [txn.transaction_id]
           );
+
+          if (existingTxn.length === 0) {
+            await db.execute(
+              'INSERT INTO Transactions (accountID, plaidTransactionID, amount, description, category, date) VALUES (?, ?, ?, ?, ?, ?)',
+              [
+                accountID,
+                txn.transaction_id,
+                txn.amount,
+                txn.name || 'No Description',
+                txn.category && txn.category.length > 0 ? txn.category[0] : 'Uncategorized',
+                txn.date,
+              ]
+            );
+          }
         }
       }
     }
+  } catch (error) {
+    console.error('Error updating transactions:', error);
+    // Depending on your cron job setup, you might want to handle retries or alerts here
   }
 });
 

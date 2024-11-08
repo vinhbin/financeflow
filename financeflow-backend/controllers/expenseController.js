@@ -2,16 +2,6 @@
 const db = require('../config/dbConfig');
 const asyncHandler = require('../middleware/asyncHandler');
 
-// Wrap db.execute in a Promise to use async/await
-const executeQuery = (query, params) => {
-  return new Promise((resolve, reject) => {
-    db.execute(query, params, (err, results) => {
-      if (err) reject(err);
-      else resolve(results);
-    });
-  });
-};
-
 // Add Expense
 const addExpense = asyncHandler(async (req, res) => {
   const { userID, amount, description, categoryID } = req.body;
@@ -22,7 +12,7 @@ const addExpense = asyncHandler(async (req, res) => {
 
   try {
     const query = 'INSERT INTO Expenses (userID, amount, description, categoryID) VALUES (?, ?, ?, ?)';
-    await executeQuery(query, [userID, amount, description, categoryID || null]);
+    await db.execute(query, [userID, amount, description, categoryID || null]);
     res.status(201).json({ message: 'Expense added successfully' });
   } catch (error) {
     console.error('Error adding expense:', error);
@@ -38,8 +28,14 @@ const getExpenses = asyncHandler(async (req, res) => {
   }
 
   try {
-    const query = 'SELECT e.*, c.name as categoryName FROM Expenses e LEFT JOIN Category c ON e.categoryID = c.categoryID WHERE e.userID = ? ORDER BY e.date DESC';
-    const results = await executeQuery(query, [userID]);
+    const query = `
+      SELECT e.*, c.name as categoryName 
+      FROM Expenses e 
+      LEFT JOIN Category c ON e.categoryID = c.categoryID 
+      WHERE e.userID = ? 
+      ORDER BY e.date DESC
+    `;
+    const [results] = await db.execute(query, [userID]);
 
     if (!results.length) {
       return res.status(200).json({ message: 'No expenses found for this user.' });
@@ -60,18 +56,26 @@ const getUserMetrics = asyncHandler(async (req, res) => {
   }
 
   try {
+    // Get total expenses from Expenses table
     const expensesQuery = 'SELECT SUM(amount) as totalExpenses FROM Expenses WHERE userID = ?';
-    const expensesResults = await executeQuery(expensesQuery, [userID]);
+    const [expensesResults] = await db.execute(expensesQuery, [userID]);
     const totalExpenses = expensesResults[0]?.totalExpenses || 0;
 
-    const transactionsQuery = 'SELECT SUM(amount) as totalTransactions FROM Transactions WHERE userID = ? AND amount > 0';
-    const transactionsResults = await executeQuery(transactionsQuery, [userID]);
+    // Get total transactions from Transactions table by joining with BankAccounts
+    const transactionsQuery = `
+      SELECT SUM(t.amount) as totalTransactions
+      FROM Transactions t
+      INNER JOIN BankAccounts b ON t.accountID = b.id
+      WHERE b.userID = ? AND t.amount > 0
+    `;
+    const [transactionsResults] = await db.execute(transactionsQuery, [userID]);
     const totalTransactions = transactionsResults[0]?.totalTransactions || 0;
 
-    const combinedTotal = totalExpenses + totalTransactions;
+    const combinedTotal = parseFloat(totalExpenses) + parseFloat(totalTransactions);
 
+    // Get upcoming subscriptions (assuming you have a Subscriptions table)
     const subscriptionsQuery = 'SELECT SUM(amount) as upcomingSubscriptions FROM Subscriptions WHERE userID = ?';
-    const subscriptionsResults = await executeQuery(subscriptionsQuery, [userID]);
+    const [subscriptionsResults] = await db.execute(subscriptionsQuery, [userID]);
     const upcomingSubscriptions = subscriptionsResults[0]?.upcomingSubscriptions || 0;
 
     res.status(200).json({ totalExpenses, totalTransactions, combinedTotal, upcomingSubscriptions });
@@ -81,4 +85,33 @@ const getUserMetrics = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addExpense, getExpenses, getUserMetrics };
+// Delete Expense
+const deleteExpense = asyncHandler(async (req, res) => {
+  const { expenseID } = req.params;
+  const { userID } = req.user; // Using req.user from authenticate.js middleware
+
+  if (!expenseID) {
+    return res.status(400).json({ error: 'expenseID is required' });
+  }
+
+  try {
+    // First, check if the expense exists and belongs to the user
+    const checkQuery = 'SELECT * FROM Expenses WHERE expenseID = ? AND userID = ?';
+    const [checkResults] = await db.execute(checkQuery, [expenseID, userID]);
+
+    if (!checkResults.length) {
+      return res.status(404).json({ error: 'Expense not found or you do not have permission to delete it' });
+    }
+
+    // Delete the expense
+    const deleteQuery = 'DELETE FROM Expenses WHERE expenseID = ?';
+    await db.execute(deleteQuery, [expenseID]);
+
+    res.status(200).json({ message: 'Expense deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting expense:', error);
+    res.status(500).json({ error: 'Server error deleting expense' });
+  }
+});
+
+module.exports = { addExpense, getExpenses, getUserMetrics, deleteExpense };

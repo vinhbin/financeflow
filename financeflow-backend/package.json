@@ -23,7 +23,7 @@
     "mysql2": "^3.11.3",
     "node-cron": "^3.0.3",
     "open": "^10.1.0",
-    "openai": "^4.68.4",
+    "openai": "^4.71.1",
     "plaid": "^29.0.0",
     "react-plaid-link": "^3.6.1"
   }

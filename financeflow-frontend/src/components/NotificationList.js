@@ -1,3 +1,4 @@
+// src/components/NotificationList.js
 // Pseudo code for notification list component
 
 function NotificationList() {

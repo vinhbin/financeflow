@@ -12,4 +12,14 @@ const db = mysql.createPool({
   queueLimit: 0,
 });
 
+// Optional: Log pool status periodically (every 5 minutes)
+setInterval(async () => {
+  try {
+    const [rows] = await db.query('SELECT COUNT(*) as count FROM information_schema.processlist');
+    console.log(`DB Connection Pool Status: Active Connections = ${rows[0].count}`);
+  } catch (error) {
+    console.error('Error querying connection pool status:', error);
+  }
+}, 300000); // 300,000 milliseconds = 5 minutes
+
 module.exports = db;
