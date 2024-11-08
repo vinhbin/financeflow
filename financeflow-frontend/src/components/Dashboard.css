@@ -333,3 +333,111 @@
     right: 5px;
   }
 }
+
+/* General Button Styles */
+.glass-button {
+  width: 100%; /* Make the button full width */
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1); /* Greyish background */
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* AI Financial Insight Card */
+.ai-insight.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ai-insight-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px; /* Adjust as needed for spacing above the button */
+}
+
+.ai-insight-content {
+  max-height: calc(100% - 60px); /* Adjust based on button height and margins */
+  overflow-y: auto;
+}
+
+.ai-insight-content p {
+  white-space: pre-wrap; /* Preserve line breaks */
+  text-align: left; /* Left-align the AI-generated text */
+  line-height: 1.5;
+}
+
+.currency-symbol {  /* Change currency symbol for Financial Metrics */
+  display: inline-block;
+  position: relative;
+  top: -0.15em; /* Adjust this value as needed to align vertically */
+  /* Optionally, adjust font size or weight if necessary */
+  /* font-size: 1.2em; */
+}
+
+/* ------------------ */
+/* Custom Toastify Styles */
+/* ------------------ */
+
+/* Custom Toast Container */
+.custom-toast-container {
+  /* Positioning is managed via ToastContainer props */
+  /* Add any additional container styles here if needed */
+}
+
+/* Custom Toast Style */
+.Toastify__toast.custom-toast {
+  background: rgba(0, 0, 0, 0.3) !important; /* Dark semi-transparent black background with further reduced opacity */
+  backdrop-filter: blur(10px) !important;    /* Blur effect for glass illusion */
+  -webkit-backdrop-filter: blur(10px) !important; /* Safari support for blur */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important; /* Slightly more subtle white border */
+  border-radius: 10px !important;             /* Rounded corners */
+  color: #ffffff !important;                  /* White text color for contrast */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important; /* Slightly softer shadow for depth */
+  padding: 16px 24px !important;              /* Adequate padding */
+  font-size: 1em !important;                  /* Consistent font size */
+  max-width: 350px !important;                /* Limit the width of the toast */
+  word-wrap: break-word !important;           /* Handle long text gracefully */
+  animation: slideInRight 0.5s ease forwards !important; /* Slide-in animation */
+  position: relative !important;               /* Ensure positioning context */
+}
+
+/* Enhance the Close Button Visibility and Functionality */
+.Toastify__toast.custom-toast .Toastify__close-button {
+  color: #ffffff !important;       /* White close button */
+  opacity: 0.8 !important;         /* Slight transparency */
+  transition: opacity 0.3s ease !important; /* Smooth transition on hover */
+  pointer-events: auto !important; /* Ensure the button is clickable */
+  z-index: 1;                       /* Position the button above other elements */
+}
+
+.Toastify__toast.custom-toast .Toastify__close-button:hover {
+  opacity: 1 !important;           /* Fully opaque on hover */
+}
+/* Optional: Slide-In Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%); /* Start off-screen to the right */
+    opacity: 0;                   /* Fully transparent */
+  }
+  to {
+    transform: translateX(0);     /* Slide into original position */
+    opacity: 1;                   /* Fully opaque */
+  }
+}
+
+/* Ensure the custom-toast has higher specificity if needed */
+.Toastify__toast-container.custom-toast-container .Toastify__toast.custom-toast {
+  /* Additional styles or overrides can be placed here */
+}

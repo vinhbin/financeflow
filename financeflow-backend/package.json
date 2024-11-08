@@ -10,7 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "ai": "^3.4.18",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -23,8 +22,11 @@
     "mysql2": "^3.11.3",
     "node-cron": "^3.0.3",
     "open": "^10.1.0",
-    "openai": "^4.71.1",
+    "openai": "^3.3.0",
     "plaid": "^29.0.0",
-    "react-plaid-link": "^3.6.1"
+    "react-flip-numbers": "^3.0.8",
+    "react-plaid-link": "^3.6.1",
+    "react-toastify": "^10.0.6",
+    "react-transition-group": "^4.4.5"
   }
 }

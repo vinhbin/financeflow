@@ -6,8 +6,9 @@ import useAuth from '../hooks/useAuth';
 import Card from './Card';
 import PlaidLinkButton from './PlaidLinkButton';
 import AddExpense from './AddExpense';
-import ExpenseItem from './ExpenseItem'; // Import the new ExpenseItem component
-import './Dashboard.css';
+import ExpenseItem from './ExpenseItem';
+import NumberRoll from './NumberRoll'; // Import the NumberRoll component
+import './Dashboard.css'; // Ensure this imports the existing Dashboard.css
 import { getFirstName } from '../utils/nameUtils';
 import api from '../utils/api';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -19,6 +20,10 @@ const Dashboard = () => {
   const { userID, userName, token, logout } = useAuth();
   const navigate = useNavigate();
   const [refreshData, setRefreshData] = useState(false); // State to trigger refetching data
+  const [fetchAIInsight, setFetchAIInsight] = useState(false); // State to control when to fetch AI insights
+  const [displayedInsight, setDisplayedInsight] = useState(''); // State for typing effect
+  const [fullInsight, setFullInsight] = useState(''); // Full AI insight text
+  const [isTyping, setIsTyping] = useState(false); // Indicates if typing effect is in progress
 
   const firstName = getFirstName(userName);
 
@@ -66,15 +71,14 @@ const Dashboard = () => {
       : null;
   }, [userID]);
 
+  // AI Insight fetch configuration
   const aiInsightConfig = useMemo(() => {
-    return userID
+    return userID && fetchAIInsight
       ? {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          data: { userID },
         }
       : null;
-  }, [userID]);
+  }, [userID, fetchAIInsight]);
 
   // Fetch data using the useFetch hook
   const { data: expenses, isLoading: expensesLoading, error: expensesError } = useFetch(
@@ -96,10 +100,38 @@ const Dashboard = () => {
   );
 
   const { data: aiInsight, isLoading: aiLoading, error: aiError } = useFetch(
-    userID ? `/api/ai-insights/generate` : '',
+    userID && fetchAIInsight ? `/api/ai-insights/generate` : '',
     aiInsightConfig
-    // Not passing refreshData here as AI insights might not need to be fetched periodically
   );
+
+  // Reset fetchAIInsight after fetching
+  useEffect(() => {
+    if (aiInsight && aiInsight.insight) {
+      setFetchAIInsight(false);
+      setFullInsight(aiInsight.insight);
+      setDisplayedInsight('');
+      setIsTyping(true);
+    } else if (aiError) {
+      setFetchAIInsight(false);
+    }
+  }, [aiInsight, aiError]);
+
+  // Typing effect for AI Insight
+  useEffect(() => {
+    let typingTimer;
+    if (isTyping && fullInsight) {
+      let index = 0;
+      typingTimer = setInterval(() => {
+        setDisplayedInsight(fullInsight.slice(0, index + 1));
+        index++;
+        if (index >= fullInsight.length) {
+          clearInterval(typingTimer);
+          setIsTyping(false);
+        }
+      }, 20); // Adjust the speed as needed (milliseconds per character)
+    }
+    return () => clearInterval(typingTimer);
+  }, [isTyping, fullInsight]);
 
   // Add logs for fetched data
   useEffect(() => {
@@ -192,6 +224,21 @@ const Dashboard = () => {
     }
   };
 
+  // Helper functions for conditional coloring
+  const getTotalExpensesColor = (value) => {
+    return value > 0 ? '#e74c3c' : '#ffffff'; // Red if > 0, else white
+  };
+
+  const getTotalIncomeColor = (value) => {
+    return value > 0 ? '#2ecc71' : '#ffffff'; // Green if > 0, else white
+  };
+
+  const getNetTotalColor = (value) => {
+    if (value > 0) return '#2ecc71'; // Green
+    if (value < 0) return '#e74c3c'; // Red
+    return '#ffffff'; // White
+  };
+
   // State variables for totals
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
@@ -239,7 +286,7 @@ const Dashboard = () => {
     if (combinedTotal !== newCombinedTotal) {
       setCombinedTotal(newCombinedTotal);
     }
-  }, [expenses, transactions]);
+  }, [expenses, transactions, totalExpenses, totalIncome, combinedTotal]);
 
   return (
     <>
@@ -296,23 +343,32 @@ const Dashboard = () => {
               <div className="metrics-container">
                 <div className="metric-item">
                   <span className="metric-label">Total Expenses</span>
-                  <span className="metric-amount">
-                    {currencySymbol('USD')}
-                    {totalExpenses.toFixed(2)}
+                  <span
+                    className="metric-amount"
+                    style={{ color: getTotalExpensesColor(totalExpenses) }}
+                  >
+                    <span className="currency-symbol">{currencySymbol('USD')}</span>
+                    <NumberRoll value={totalExpenses} />
                   </span>
                 </div>
                 <div className="metric-item">
                   <span className="metric-label">Total Income</span>
-                  <span className="metric-amount">
-                    {currencySymbol('USD')}
-                    {totalIncome.toFixed(2)}
+                  <span
+                    className="metric-amount"
+                    style={{ color: getTotalIncomeColor(totalIncome) }}
+                  >
+                    <span className="currency-symbol">{currencySymbol('USD')}</span>
+                    <NumberRoll value={totalIncome} />
                   </span>
                 </div>
                 <div className="metric-item">
                   <span className="metric-label">Net Total</span>
-                  <span className="metric-amount">
-                    {currencySymbol('USD')}
-                    {combinedTotal.toFixed(2)}
+                  <span
+                    className="metric-amount"
+                    style={{ color: getNetTotalColor(combinedTotal) }}
+                  >
+                    <span className="currency-symbol">{currencySymbol('USD')}</span>
+                    <NumberRoll value={combinedTotal} />
                   </span>
                 </div>
               </div>
@@ -366,28 +422,34 @@ const Dashboard = () => {
 
           {/* AI Financial Insight */}
           <Card title="AI Financial Insight" className="ai-insight card">
-            {aiLoading ? (
-              <p>Loading insights...</p>
-            ) : aiError ? (
-              <p className="error-message">{aiError}</p>
-            ) : aiInsight && aiInsight.insight ? (
-              <p>{aiInsight.insight}</p>
-            ) : aiInsight && aiInsight.message ? (
-              <div>
-                <p>{aiInsight.message}</p>
-                <button
-                  className="generate-insight-button"
-                  onClick={() => {
-                    // Implement a retry mechanism or re-fetch AI insights
-                    setRefreshData((prev) => !prev); // Trigger AI insight re-fetch
-                  }}
-                >
-                  Generate Insights
-                </button>
-              </div>
-            ) : (
-              <p>No AI insights available.</p>
-            )}
+            <div className="ai-insight-container">
+              {aiLoading ? (
+                <p>Loading insights...</p>
+              ) : aiError ? (
+                <div>
+                  <p className="error-message">{aiError}</p>
+                </div>
+              ) : displayedInsight ? (
+                <div className="ai-insight-content">
+                  <p style={{ textAlign: 'left', whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>
+                    {displayedInsight}
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p>No AI insights available.</p>
+                </div>
+              )}
+            </div>
+            <button
+              className="glass-button"
+              onClick={() => {
+                setFetchAIInsight(true);
+              }}
+              disabled={isTyping}
+            >
+              {isTyping ? 'Generating...' : 'Generate Insight'}
+            </button>
           </Card>
         </div>
 
@@ -436,9 +498,9 @@ const Dashboard = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        toastClassName="custom-toast"
+        toastClassName="custom-toast"             /* Custom class for individual toasts */
         containerClassName="custom-toast-container"
-      />
+/>
     </>
   );
 };

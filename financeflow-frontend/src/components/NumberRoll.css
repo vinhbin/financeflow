@@ -1,0 +1,42 @@
+/* src/components/NumberRoll.css */
+
+.number-roll {
+    display: inline-block;
+  }
+  
+  .digit {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    vertical-align: bottom;
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+    height: 1.5em; /* Match the font-size of .metric-amount */
+    width: 0.55em; /* Adjust width as needed for digit spacing */
+  }
+  
+  .digit-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: transform 0.3s ease-in-out;
+    color: inherit; /* Inherit color from parent */
+    height: 3em; /* Two digits stacked vertically */
+  }
+  
+  .digit-inner.animate {
+    transform: translateY(-1.5em); /* Shift up by one digit height */
+  }
+  
+  .digit-current,
+  .digit-target {
+    display: block;
+    height: 1.5em; /* Match the height to align digits */
+    line-height: 1.5em;
+    text-align: center;
+    width: 100%;
+    color: inherit; /* Ensure digits inherit the color */
+    font-family: inherit; /* Ensure font consistency */
+  }
+  
