@@ -17,16 +17,20 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.3",
     "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
     "open": "^10.1.0",
     "openai": "^3.3.0",
     "plaid": "^29.0.0",
     "react-flip-numbers": "^3.0.8",
     "react-plaid-link": "^3.6.1",
     "react-toastify": "^10.0.6",
-    "react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5",
+    "winston": "^3.17.0"
   }
 }

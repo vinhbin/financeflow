@@ -169,3 +169,8 @@ p {
     font-size: 0.9rem; /* Adjust font size */
   }
 }
+
+/* Added spacing for combined links (Register | Reset Password */
+.auth-links {
+  margin-top: 30px; /* Adjust this value as needed for desired spacing */
+}

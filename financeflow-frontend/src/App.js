@@ -6,6 +6,8 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Register from './components/Register';
+import RequestReset from './components/RequestReset';
+import ResetPassword from './components/ResetPassword';
 import AddExpense from './components/AddExpense';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
@@ -23,6 +25,12 @@ function App() {
             {/* Authentication Routes */}
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            
+            {/* Request Reset Password Route */}
+            <Route path="reset-password" element={<RequestReset />} />
+            
+            {/* Reset Password with Token Route */}
+            <Route path="reset-password/:token" element={<ResetPassword />} />
 
             {/* Protected Routes */}
             <Route

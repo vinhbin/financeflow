@@ -38,7 +38,7 @@ const getExpenses = asyncHandler(async (req, res) => {
     const [results] = await db.execute(query, [userID]);
 
     if (!results.length) {
-      return res.status(200).json({ message: 'No expenses found for this user.' });
+      return res.status(200).json({ message: 'No expenses found.' });
     }
 
     res.status(200).json({ expenses: results });

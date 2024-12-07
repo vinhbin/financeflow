@@ -1,0 +1,331 @@
+2024-12-07 12:43:41 [INFO]: Email transporter is configured correctly.
+2024-12-07 12:45:50 [INFO]: Email transporter is configured correctly.
+2024-12-07 12:46:33 [INFO]: Email transporter is configured correctly.
+2024-12-07 12:46:44 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 13:02:43 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 13:39:51 [INFO]: Email transporter is configured correctly.
+2024-12-07 13:40:13 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:13 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:13 [WARN]: Invalid or expired token attempted
+2024-12-07 13:40:13 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:13 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:13 [WARN]: Invalid or expired token attempted
+2024-12-07 13:40:24 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:24 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:24 [WARN]: Invalid or expired token attempted
+2024-12-07 13:40:24 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:24 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:24 [WARN]: Invalid or expired token attempted
+2024-12-07 13:40:37 [INFO]: Email transporter is configured correctly.
+2024-12-07 13:40:47 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:47 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:47 [WARN]: Invalid or expired token attempted
+2024-12-07 13:40:47 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:40:47 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:40:47 [WARN]: Invalid or expired token attempted
+2024-12-07 13:42:04 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:42:04 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:42:04 [WARN]: Invalid or expired token attempted
+2024-12-07 13:42:04 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:42:04 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:42:04 [WARN]: Invalid or expired token attempted
+2024-12-07 13:42:16 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:42:16 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:42:16 [WARN]: Invalid or expired token attempted
+2024-12-07 13:42:16 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:42:16 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:42:16 [WARN]: Invalid or expired token attempted
+2024-12-07 13:45:02 [INFO]: Email transporter is configured correctly.
+2024-12-07 13:48:13 [INFO]: Email transporter is configured correctly.
+2024-12-07 13:48:22 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:48:22 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:48:22 [WARN]: Invalid or expired token attempted
+2024-12-07 13:48:22 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:48:22 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:48:22 [WARN]: Invalid or expired token attempted
+2024-12-07 13:49:53 [INFO]: Email transporter is configured correctly.
+2024-12-07 13:49:55 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:49:55 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:49:55 [WARN]: Invalid or expired token attempted
+2024-12-07 13:49:55 [INFO]: Users with valid reset tokens: 1
+2024-12-07 13:49:55 [INFO]: Comparing token with userID 41: false
+2024-12-07 13:49:55 [WARN]: Invalid or expired token attempted
+2024-12-07 14:04:30 [INFO]: Users with valid reset tokens: 0
+2024-12-07 14:04:30 [WARN]: Invalid or expired token attempted
+2024-12-07 14:07:42 [INFO]: Users with valid reset tokens: 0
+2024-12-07 14:07:42 [WARN]: Invalid or expired token attempted
+2024-12-07 14:09:31 [INFO]: Email transporter is configured correctly.
+2024-12-07 14:10:36 [INFO]: Generated resetToken: 315ffc0ca66b7a65958d019a74423c677b3490e6cdc34687dab6fe2b672694c2 for email: dagmk2020@gmail.com
+2024-12-07 14:10:36 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:10:36 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:10:36 for email: dagmk2020@gmail.com
+2024-12-07 14:10:36 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:10:36 [INFO]: Reset link: http://localhost:3000/reset-password/315ffc0ca66b7a65958d019a74423c677b3490e6cdc34687dab6fe2b672694c2 for email: dagmk2020@gmail.com
+2024-12-07 14:10:37 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:10:37 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:11:19 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:11:19 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:11:19 [INFO]: Token is valid for userID 41
+2024-12-07 14:11:19 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:11:19 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:11:19 [INFO]: Token is valid for userID 41
+2024-12-07 14:11:30 [INFO]: Received token: 315ffc0ca66b7a65958d019a74423c677b3490e6cdc34687dab6fe2b672694c2
+2024-12-07 14:11:30 [INFO]: Server Time (UTC): 2024-12-07T19:11:30.194Z
+2024-12-07 14:11:30 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 19:11:28 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:11:30 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:11:30 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 20:10:36 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:11:30 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:11:30 [INFO]: User found for token: userID 41
+2024-12-07 14:11:30 [INFO]: Hashed new password for userID 41
+2024-12-07 14:11:30 [INFO]: Password updated for userID 41
+2024-12-07 14:11:39 [INFO]: Users with valid reset tokens: 0
+2024-12-07 14:11:39 [WARN]: Invalid or expired token attempted
+2024-12-07 14:11:39 [INFO]: Users with valid reset tokens: 0
+2024-12-07 14:11:39 [WARN]: Invalid or expired token attempted
+2024-12-07 14:23:05 [INFO]: User logged in successfully with email: jdoe@gmail.com
+2024-12-07 14:23:18 [INFO]: Generated resetToken: cc9599133851e31c7f8078deee8fd5baca14bdfe6d3556fd83063f1ae68a5e28 for email: dagmk2020@gmail.com
+2024-12-07 14:23:18 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:23:18 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:23:18 for email: dagmk2020@gmail.com
+2024-12-07 14:23:18 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:23:18 [INFO]: Reset link: http://localhost:3000/reset-password/cc9599133851e31c7f8078deee8fd5baca14bdfe6d3556fd83063f1ae68a5e28 for email: dagmk2020@gmail.com
+2024-12-07 14:23:19 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:23:19 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:25:03 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:25:03 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:25:03 [INFO]: Token is valid for userID 41
+2024-12-07 14:25:03 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:25:03 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:25:03 [INFO]: Token is valid for userID 41
+2024-12-07 14:25:27 [INFO]: Received token: cc9599133851e31c7f8078deee8fd5baca14bdfe6d3556fd83063f1ae68a5e28
+2024-12-07 14:25:27 [INFO]: Server Time (UTC): 2024-12-07T19:25:27.140Z
+2024-12-07 14:25:27 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 19:25:25 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:25:27 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:25:27 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 20:23:18 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:25:27 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:25:27 [INFO]: User found for token: userID 41
+2024-12-07 14:25:27 [INFO]: Hashed new password for userID 41
+2024-12-07 14:25:27 [INFO]: Password updated for userID 41
+2024-12-07 14:29:30 [INFO]: User logged in successfully with email: rdoe@gmail.com
+2024-12-07 14:31:55 [INFO]: Generated resetToken: 8dd5fc7c1cbd9cc7837cf3500514a8f92890a85481a89338ee30b2b60a652b80 for email: dagmk2020@gmail.com
+2024-12-07 14:31:55 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:31:55 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:31:55 for email: dagmk2020@gmail.com
+2024-12-07 14:31:55 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:31:55 [INFO]: Reset link: http://localhost:3000/reset-password/8dd5fc7c1cbd9cc7837cf3500514a8f92890a85481a89338ee30b2b60a652b80 for email: dagmk2020@gmail.com
+2024-12-07 14:31:56 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:31:56 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:37:08 [INFO]: Email transporter is configured correctly.
+2024-12-07 14:37:11 [INFO]: Generated resetToken: 538f6fb3c97fbf8f71ecc910567814d68f80cd000c819f1968f5404e578a88b0 for email: dagmk2020@gmail.com
+2024-12-07 14:37:11 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:37:11 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:37:11 for email: dagmk2020@gmail.com
+2024-12-07 14:37:11 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:37:11 [INFO]: Reset link: http://localhost:3000/reset-password/538f6fb3c97fbf8f71ecc910567814d68f80cd000c819f1968f5404e578a88b0 for email: dagmk2020@gmail.com
+2024-12-07 14:37:12 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:37:12 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:42:05 [INFO]: Generated resetToken: e0a83f6b7907b586ce00b296d4411fa6a177cab1027bfa09ae58225ad45d2996 for email: dagmk2020@gmail.com
+2024-12-07 14:42:05 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:42:05 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:42:05 for email: dagmk2020@gmail.com
+2024-12-07 14:42:05 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:42:05 [INFO]: Reset link: http://localhost:3000/reset-password/e0a83f6b7907b586ce00b296d4411fa6a177cab1027bfa09ae58225ad45d2996 for email: dagmk2020@gmail.com
+2024-12-07 14:42:06 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:42:06 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:46:07 [INFO]: Generated resetToken: 81aa1271b7180b50d4b426e329c2aac36499c7dc7de7d6090f4edfe2047c3101 for email: dagmk2020@gmail.com
+2024-12-07 14:46:07 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:46:07 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:46:07 for email: dagmk2020@gmail.com
+2024-12-07 14:46:07 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:46:07 [INFO]: Reset link: http://localhost:3000/reset-password/81aa1271b7180b50d4b426e329c2aac36499c7dc7de7d6090f4edfe2047c3101 for email: dagmk2020@gmail.com
+2024-12-07 14:46:08 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:46:08 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:48:13 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:48:13 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:48:13 [INFO]: Token is valid for userID 41
+2024-12-07 14:48:13 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:48:13 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:48:13 [INFO]: Token is valid for userID 41
+2024-12-07 14:49:12 [INFO]: Generated resetToken: 8716733e93a298293053f8c3d58e06d2b5fadd4d9de06752f93e44abce2a1b76 for email: dagmk2020@gmail.com
+2024-12-07 14:49:12 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:49:12 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:49:12 for email: dagmk2020@gmail.com
+2024-12-07 14:49:13 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:49:13 [INFO]: Reset link: http://localhost:3000/reset-password/8716733e93a298293053f8c3d58e06d2b5fadd4d9de06752f93e44abce2a1b76 for email: dagmk2020@gmail.com
+2024-12-07 14:49:13 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:49:13 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:50:55 [INFO]: Generated resetToken: a8b1d99b998936262d52b37a3d02fd3fdd27e85fa3f07d02b5bf89f496efafa8 for email: dagmk2020@gmail.com
+2024-12-07 14:50:55 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:50:55 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:50:55 for email: dagmk2020@gmail.com
+2024-12-07 14:50:55 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:50:55 [INFO]: Reset link: http://localhost:3000/reset-password/a8b1d99b998936262d52b37a3d02fd3fdd27e85fa3f07d02b5bf89f496efafa8 for email: dagmk2020@gmail.com
+2024-12-07 14:50:56 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:50:56 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:54:39 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:54:39 [INFO]: Comparing token with userID 41: false
+2024-12-07 14:54:39 [WARN]: Invalid or expired token attempted
+2024-12-07 14:54:39 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:54:39 [INFO]: Comparing token with userID 41: false
+2024-12-07 14:54:39 [WARN]: Invalid or expired token attempted
+2024-12-07 14:54:43 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:54:43 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:54:43 [INFO]: Token is valid for userID 41
+2024-12-07 14:54:43 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:54:43 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:54:43 [INFO]: Token is valid for userID 41
+2024-12-07 14:54:49 [INFO]: Received token: a8b1d99b998936262d52b37a3d02fd3fdd27e85fa3f07d02b5bf89f496efafa8
+2024-12-07 14:54:49 [INFO]: Server Time (UTC): 2024-12-07T19:54:49.803Z
+2024-12-07 14:54:49 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 19:54:48 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:54:49 [INFO]: Users with valid reset tokens: 1
+2024-12-07 14:54:49 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 20:50:55 GMT-0500 (Eastern Standard Time)
+2024-12-07 14:54:49 [INFO]: Comparing token with userID 41: true
+2024-12-07 14:54:49 [INFO]: User found for token: userID 41
+2024-12-07 14:54:49 [INFO]: Hashed new password for userID 41
+2024-12-07 14:54:49 [INFO]: Password updated for userID 41
+2024-12-07 14:55:20 [INFO]: Email transporter is configured correctly.
+2024-12-07 14:55:25 [INFO]: Generated resetToken: 4a2372883ffcea5656fb405e33795983e3f54e17bbd3d778497cd6b6e33fcb84 for email: dagmk2020@gmail.com
+2024-12-07 14:55:25 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:55:25 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:55:25 for email: dagmk2020@gmail.com
+2024-12-07 14:55:25 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:55:25 [INFO]: Reset link: http://localhost:3000/reset-password/4a2372883ffcea5656fb405e33795983e3f54e17bbd3d778497cd6b6e33fcb84 for email: dagmk2020@gmail.com
+2024-12-07 14:55:26 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:55:26 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 14:59:56 [INFO]: Generated resetToken: 26172ea29ff8957894e933b6f776f56c2cee0f51eb35c67147f0fba4bb536012 for email: dagmk2020@gmail.com
+2024-12-07 14:59:56 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 14:59:56 [INFO]: resetTokenExpiry (UTC): 2024-12-07 20:59:56 for email: dagmk2020@gmail.com
+2024-12-07 14:59:56 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 14:59:56 [INFO]: Reset link: http://localhost:3000/reset-password/26172ea29ff8957894e933b6f776f56c2cee0f51eb35c67147f0fba4bb536012 for email: dagmk2020@gmail.com
+2024-12-07 14:59:57 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 14:59:57 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 15:00:55 [INFO]: User logged in successfully with email: jdoe@gmail.com
+2024-12-07 15:01:44 [INFO]: Generated resetToken: 4b68142d56bdcdfcdfb693e613cc8bc00ca0df8f99b43706c0d52b13b2c657bd for email: dagmk2020@gmail.com
+2024-12-07 15:01:44 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 15:01:44 [INFO]: resetTokenExpiry (UTC): 2024-12-07 21:01:44 for email: dagmk2020@gmail.com
+2024-12-07 15:01:44 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 15:01:44 [INFO]: Reset link: http://localhost:3000/reset-password/4b68142d56bdcdfcdfb693e613cc8bc00ca0df8f99b43706c0d52b13b2c657bd for email: dagmk2020@gmail.com
+2024-12-07 15:01:45 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 15:01:45 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 16:46:18 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 16:46:21 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 16:46:24 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 16:46:32 [INFO]: Generated resetToken: 270201286e639ba77c056377a07313fc18c996da0947937b406eefe7f4bd073f for email: dagmk2020@gmail.com
+2024-12-07 16:46:32 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 16:46:32 [INFO]: resetTokenExpiry (UTC): 2024-12-07 22:46:32 for email: dagmk2020@gmail.com
+2024-12-07 16:46:32 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 16:46:32 [INFO]: Reset link: http://localhost:3000/reset-password/270201286e639ba77c056377a07313fc18c996da0947937b406eefe7f4bd073f for email: dagmk2020@gmail.com
+2024-12-07 16:46:33 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 16:46:33 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 16:47:00 [INFO]: Users with valid reset tokens: 1
+2024-12-07 16:47:00 [INFO]: Comparing token with userID 41: true
+2024-12-07 16:47:00 [INFO]: Token is valid for userID 41
+2024-12-07 16:47:00 [INFO]: Users with valid reset tokens: 1
+2024-12-07 16:47:00 [INFO]: Comparing token with userID 41: true
+2024-12-07 16:47:00 [INFO]: Token is valid for userID 41
+2024-12-07 16:47:04 [INFO]: Received token: 270201286e639ba77c056377a07313fc18c996da0947937b406eefe7f4bd073f
+2024-12-07 16:47:04 [INFO]: Server Time (UTC): 2024-12-07T21:47:04.949Z
+2024-12-07 16:47:04 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 21:47:03 GMT-0500 (Eastern Standard Time)
+2024-12-07 16:47:04 [INFO]: Users with valid reset tokens: 1
+2024-12-07 16:47:04 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 22:46:32 GMT-0500 (Eastern Standard Time)
+2024-12-07 16:47:05 [INFO]: Comparing token with userID 41: true
+2024-12-07 16:47:05 [INFO]: User found for token: userID 41
+2024-12-07 16:47:05 [INFO]: Hashed new password for userID 41
+2024-12-07 16:47:05 [INFO]: Password updated for userID 41
+2024-12-07 16:47:16 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 16:47:26 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 16:47:37 [INFO]: Users with valid reset tokens: 0
+2024-12-07 16:47:37 [WARN]: Invalid or expired token attempted
+2024-12-07 16:47:37 [INFO]: Users with valid reset tokens: 0
+2024-12-07 16:47:37 [WARN]: Invalid or expired token attempted
+2024-12-07 16:47:41 [INFO]: Users with valid reset tokens: 0
+2024-12-07 16:47:41 [WARN]: Invalid or expired token attempted
+2024-12-07 16:47:41 [INFO]: Users with valid reset tokens: 0
+2024-12-07 16:47:41 [WARN]: Invalid or expired token attempted
+2024-12-07 17:05:48 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:05:54 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:06:00 [INFO]: User logged in successfully with email: rdoe@gmail.com
+2024-12-07 17:06:07 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:06:11 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:06:12 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:06:16 [INFO]: Generated resetToken: c1d01b53cec6bd0a4f08427168f87ada7796b1886acd4f864517464cdab1e0e1 for email: dagmk2020@gmail.com
+2024-12-07 17:06:16 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 17:06:16 [INFO]: resetTokenExpiry (UTC): 2024-12-07 23:06:16 for email: dagmk2020@gmail.com
+2024-12-07 17:06:16 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 17:06:16 [INFO]: Reset link: http://localhost:3000/reset-password/c1d01b53cec6bd0a4f08427168f87ada7796b1886acd4f864517464cdab1e0e1 for email: dagmk2020@gmail.com
+2024-12-07 17:06:16 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 17:06:16 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 17:06:24 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:06:24 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:06:24 [INFO]: Token is valid for userID 41
+2024-12-07 17:06:24 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:06:24 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:06:24 [INFO]: Token is valid for userID 41
+2024-12-07 17:06:27 [INFO]: Received token: c1d01b53cec6bd0a4f08427168f87ada7796b1886acd4f864517464cdab1e0e1
+2024-12-07 17:06:27 [INFO]: Server Time (UTC): 2024-12-07T22:06:27.850Z
+2024-12-07 17:06:27 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 22:06:26 GMT-0500 (Eastern Standard Time)
+2024-12-07 17:06:27 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:06:27 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 23:06:16 GMT-0500 (Eastern Standard Time)
+2024-12-07 17:06:27 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:06:27 [INFO]: User found for token: userID 41
+2024-12-07 17:06:28 [INFO]: Hashed new password for userID 41
+2024-12-07 17:06:28 [INFO]: Password updated for userID 41
+2024-12-07 17:06:36 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:06:42 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:06:50 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:06:51 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:10:18 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:10:31 [INFO]: Email transporter is configured correctly.
+2024-12-07 17:10:38 [INFO]: Generated resetToken: 2f9c9418352330a1771e2b16b55c1ca981887b5f5b06e8fb4be58151bee1ec5f for email: dagmk2020@gmail.com
+2024-12-07 17:10:38 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 17:10:38 [INFO]: resetTokenExpiry (UTC): 2024-12-07 23:10:38 for email: dagmk2020@gmail.com
+2024-12-07 17:10:38 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 17:10:38 [INFO]: Reset link: http://localhost:3000/reset-password/2f9c9418352330a1771e2b16b55c1ca981887b5f5b06e8fb4be58151bee1ec5f for email: dagmk2020@gmail.com
+2024-12-07 17:10:39 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 17:10:39 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 17:10:52 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:10:52 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:10:52 [INFO]: Token is valid for userID 41
+2024-12-07 17:10:52 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:10:52 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:10:52 [INFO]: Token is valid for userID 41
+2024-12-07 17:11:01 [INFO]: Received token: 2f9c9418352330a1771e2b16b55c1ca981887b5f5b06e8fb4be58151bee1ec5f
+2024-12-07 17:11:01 [INFO]: Server Time (UTC): 2024-12-07T22:11:01.592Z
+2024-12-07 17:11:01 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 22:10:59 GMT-0500 (Eastern Standard Time)
+2024-12-07 17:11:01 [INFO]: Users with valid reset tokens: 1
+2024-12-07 17:11:01 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 23:10:38 GMT-0500 (Eastern Standard Time)
+2024-12-07 17:11:01 [INFO]: Comparing token with userID 41: true
+2024-12-07 17:11:01 [INFO]: User found for token: userID 41
+2024-12-07 17:11:01 [INFO]: Hashed new password for userID 41
+2024-12-07 17:11:01 [INFO]: Password updated for userID 41
+2024-12-07 17:11:12 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:42:54 [INFO]: User registered successfully with email: mia@gmail.com
+2024-12-07 17:43:00 [INFO]: User logged in successfully with email: mia@gmail.com
+2024-12-07 17:43:13 [INFO]: User registered successfully with email: mia@gmaill.com
+2024-12-07 17:43:20 [INFO]: User logged in successfully with email: mia@gmail.com
+2024-12-07 17:43:30 [WARN]: User already exists with email: mia@gmail.com
+2024-12-07 17:58:11 [INFO]: Email transporter is configured correctly.
+2024-12-07 17:58:29 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:58:30 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:58:55 [INFO]: User registered successfully with email: mia1@gmail.com
+2024-12-07 17:59:03 [INFO]: User logged in successfully with email: mia1@gmail.com
+2024-12-07 17:59:12 [WARN]: Invalid password attempt for email: dagmk2020@gmail.com
+2024-12-07 17:59:13 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
+2024-12-07 17:59:48 [INFO]: Generated resetToken: fd94f418231c3ea939005ccbf5312425e8d872ed4fb2eda48a5bf528965a4014 for email: dagmk2020@gmail.com
+2024-12-07 17:59:48 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-07 17:59:48 [INFO]: resetTokenExpiry (UTC): 2024-12-07 23:59:48 for email: dagmk2020@gmail.com
+2024-12-07 17:59:48 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-07 17:59:48 [INFO]: Reset link: http://localhost:3000/reset-password/fd94f418231c3ea939005ccbf5312425e8d872ed4fb2eda48a5bf528965a4014 for email: dagmk2020@gmail.com
+2024-12-07 17:59:49 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-07 17:59:49 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-07 18:00:10 [INFO]: Users with valid reset tokens: 1
+2024-12-07 18:00:10 [INFO]: Comparing token with userID 41: true
+2024-12-07 18:00:10 [INFO]: Token is valid for userID 41
+2024-12-07 18:00:10 [INFO]: Users with valid reset tokens: 1
+2024-12-07 18:00:10 [INFO]: Comparing token with userID 41: true
+2024-12-07 18:00:10 [INFO]: Token is valid for userID 41
+2024-12-07 18:00:14 [INFO]: Received token: fd94f418231c3ea939005ccbf5312425e8d872ed4fb2eda48a5bf528965a4014
+2024-12-07 18:00:14 [INFO]: Server Time (UTC): 2024-12-07T23:00:14.667Z
+2024-12-07 18:00:14 [INFO]: Database UTC_NOW(): Sat Dec 07 2024 23:00:12 GMT-0500 (Eastern Standard Time)
+2024-12-07 18:00:14 [INFO]: Users with valid reset tokens: 1
+2024-12-07 18:00:14 [INFO]: UserID: 41, resetTokenExpiry (UTC): Sat Dec 07 2024 23:59:48 GMT-0500 (Eastern Standard Time)
+2024-12-07 18:00:14 [INFO]: Comparing token with userID 41: true
+2024-12-07 18:00:14 [INFO]: User found for token: userID 41
+2024-12-07 18:00:14 [INFO]: Hashed new password for userID 41
+2024-12-07 18:00:14 [INFO]: Password updated for userID 41
+2024-12-07 18:00:23 [INFO]: Users with valid reset tokens: 0
+2024-12-07 18:00:23 [WARN]: Invalid or expired token attempted
+2024-12-07 18:00:23 [INFO]: Users with valid reset tokens: 0
+2024-12-07 18:00:23 [WARN]: Invalid or expired token attempted
+2024-12-07 18:00:29 [INFO]: User logged in successfully with email: dagmk2020@gmail.com

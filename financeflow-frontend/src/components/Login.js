@@ -2,30 +2,28 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import { AuthContext } from '../context/AuthContext'; // Named import
-import Spinner from './Spinner'; // Import the Spinner component
-import './Auth.css'; // Import the shared CSS
+import { AuthContext } from '../context/AuthContext';
+import Spinner from './Spinner'; // Optional: Spinner component for loading state
+import './Auth.css'; // Reuse the existing Auth styles
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Destructure login from context
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage(''); // Reset message on new login attempt
-    setIsLoading(true); // Start loading
-    console.log('Attempting login with:', { email, password }); // Debugging log
+    setMessage('');
+    setIsLoading(true);
+    console.log('Attempting login with:', { email, password });
 
     try {
-      // Make a POST request to the backend API
       const response = await api.post('/api/users/login', { email, password });
-      console.log('Login response:', response.data); // Debugging log
+      console.log('Login response:', response.data);
 
-      // Check if userID is present
       if (!response.data.userID) {
         console.error('userID is missing in the login response.');
         setMessage('Login failed. Please try again.');
@@ -33,24 +31,20 @@ const Login = () => {
         return;
       }
 
-      // Use the login function from context to update auth state
-      console.log('Using context login function.');
-      login(response.data.token, response.data.userID, response.data.name); // Pass name instead of email
+      login(response.data.token, response.data.userID, response.data.name);
 
-      // Set success message
       setMessage('Login successful! Redirecting to dashboard...');
 
-      // Wait for 1 second before navigating
       setTimeout(() => {
         console.log('Navigating to dashboard.');
         navigate('/dashboard');
         console.log('Navigation to dashboard triggered.');
-        setIsLoading(false); // End loading after navigation
-      }, 1000); // 1000 milliseconds = 1 second
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
       console.error('Error logging in:', error.response ? error.response.data : error.message);
       setMessage(error.response?.data?.message || 'Login failed. Please try again.');
-      setIsLoading(false); // End loading on error
+      setIsLoading(false);
     }
   };
   
@@ -71,8 +65,6 @@ const Login = () => {
               placeholder="Enter your email"
               required
             />
-            {/* Display email error */}
-            {/* {errors.email && <div className="error-message">{errors.email}</div>} */}
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label> {/* Linked label for accessibility */}
@@ -84,9 +76,6 @@ const Login = () => {
               placeholder="Enter your password"
               required
             />
-            {/*
-            {errors.password && <div className="error-message">{errors.password}</div>}
-            */}
           </div>
           <button type="submit" className="glass-button" disabled={isLoading}>
             Login
@@ -99,13 +88,26 @@ const Login = () => {
         {/* Display spinner during loading */}
         {isLoading && <Spinner />}
 
-        {/* Register Section */}
-        <p>
-          <span className="switch-text">Don't have an account?</span>
-          <span 
-            className="switch-link" 
+        {/* Combined Links: Reset Password | Register Here */}
+        <p className="auth-links">
+          <span
+            className="switch-link"
+            onClick={() => navigate('/reset-password')}
+            role="button"
+            tabIndex={0}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                navigate('/reset-password');
+              }
+            }}
+          >
+            Reset Password
+          </span>
+          {' | '}
+          <span
+            className="switch-link"
             onClick={() => navigate('/register')}
-            role="button" 
+            role="button"
             tabIndex={0}
             onKeyPress={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
