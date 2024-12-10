@@ -663,3 +663,32 @@
 2024-12-09 21:51:54 [WARN]: Invalid or expired token attempted
 2024-12-09 21:52:27 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
 2024-12-09 21:59:38 [INFO]: Email transporter is configured correctly.
+2024-12-09 21:59:40 [INFO]: User logged in successfully with email: jdoe@gmail.com
+2024-12-09 22:31:24 [INFO]: User logged in successfully with email: rdoe@gmail.com
+2024-12-09 22:34:13 [INFO]: Generated resetToken: d94641d52a0873b042238c922ab6366d24b07abcbc66c142442967181b44468d for email: dagmk2020@gmail.com
+2024-12-09 22:34:13 [INFO]: Hashed resetToken for email: dagmk2020@gmail.com
+2024-12-09 22:34:13 [INFO]: resetTokenExpiry (UTC): 2024-12-10 04:34:13 for email: dagmk2020@gmail.com
+2024-12-09 22:34:13 [INFO]: Updated user dagmk2020@gmail.com with resetToken and resetTokenExpiry
+2024-12-09 22:34:13 [INFO]: Reset link: http://localhost:3000/reset-password/d94641d52a0873b042238c922ab6366d24b07abcbc66c142442967181b44468d for email: dagmk2020@gmail.com
+2024-12-09 22:34:15 [INFO]: Email sent to dagmk2020@gmail.com with subject "Password Reset Request" using template "resetPassword"
+2024-12-09 22:34:15 [INFO]: Password reset email sent to dagmk2020@gmail.com
+2024-12-09 22:34:33 [INFO]: Users with valid reset tokens: 1
+2024-12-09 22:34:33 [INFO]: Comparing token with userID 41: true
+2024-12-09 22:34:33 [INFO]: Token is valid for userID 41
+2024-12-09 22:34:33 [INFO]: Users with valid reset tokens: 1
+2024-12-09 22:34:33 [INFO]: Comparing token with userID 41: true
+2024-12-09 22:34:33 [INFO]: Token is valid for userID 41
+2024-12-09 22:34:49 [INFO]: Received token: d94641d52a0873b042238c922ab6366d24b07abcbc66c142442967181b44468d
+2024-12-09 22:34:49 [INFO]: Server Time (UTC): 2024-12-10T03:34:49.833Z
+2024-12-09 22:34:49 [INFO]: Database UTC_NOW(): Tue Dec 10 2024 03:34:51 GMT-0500 (Eastern Standard Time)
+2024-12-09 22:34:49 [INFO]: Users with valid reset tokens: 1
+2024-12-09 22:34:49 [INFO]: UserID: 41, resetTokenExpiry (UTC): Tue Dec 10 2024 04:34:13 GMT-0500 (Eastern Standard Time)
+2024-12-09 22:34:49 [INFO]: Comparing token with userID 41: true
+2024-12-09 22:34:49 [INFO]: User found for token: userID 41
+2024-12-09 22:34:49 [INFO]: Hashed new password for userID 41
+2024-12-09 22:34:50 [INFO]: Password updated for userID 41
+2024-12-09 22:35:04 [INFO]: Users with valid reset tokens: 0
+2024-12-09 22:35:04 [WARN]: Invalid or expired token attempted
+2024-12-09 22:35:04 [INFO]: Users with valid reset tokens: 0
+2024-12-09 22:35:04 [WARN]: Invalid or expired token attempted
+2024-12-09 22:35:14 [INFO]: User logged in successfully with email: dagmk2020@gmail.com
