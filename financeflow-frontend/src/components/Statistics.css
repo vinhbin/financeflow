@@ -1,0 +1,405 @@
+/* src/components/Statistics.css */
+
+.statistics-page {
+  /* Full viewport dimensions */
+  width: 100vw;
+  height: 100vh;
+  
+  /* Glass-like appearance */
+  background: rgba(0, 0, 0, 0.5); /* Similar to .card */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Similar to .card */
+  border-radius: 15px; /* Similar to .card */
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Similar to .card */
+
+  /* Layout settings */
+  display: flex;
+  flex-direction: column;
+
+  /* Positioning to span full screen */
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  /* Ensure it touches the edges */
+  margin: 0;
+  padding: 0;
+}
+
+.statistics-header {
+  /* Fixed header styling */
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Ensure the header does not scroll */
+  flex: 0 0 auto;
+
+  /* Align text */
+  text-align: center;
+  
+  /* Added positioning for back button */
+  position: relative;
+}
+
+.statistics-header h2 {
+  color: #ffffff; /* Set "Statistics" title to white */
+  font-size: 2em;
+  font-family: 'Poppins', sans-serif;
+}
+
+.statistics-content {
+  /* Scrollable content area */
+  flex: 1 1 auto;
+  overflow-y: auto;
+  
+  /* Internal padding */
+  padding: 20px;
+
+  /* Prevent the content from touching the edges */
+  box-sizing: border-box;
+}
+
+/* Define the pulsate animation */
+@keyframes pulsate {
+  0% {
+    stroke: currentColor;
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke: #f39c12; /* Highlight color */
+    stroke-opacity: 0.7;
+  }
+  100% {
+    stroke: currentColor;
+    stroke-opacity: 1;
+  }
+}
+
+/* Animation class */
+.pulsate-line {
+  animation: pulsate 3s infinite;
+}
+
+/* Scrollbar Styling (Optional for better aesthetics) */
+.statistics-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.statistics-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.statistics-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+/* Filter Labels */
+.filter-container .filter-item label {
+  color: #d3d3d3; /* Light grey color */
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-item input[type="date"],
+.filter-item select,
+.custom-date-picker {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  background: #333333; /* Dark grey background */
+  backdrop-filter: blur(5px);
+  color: #ffffff; /* White text for better contrast */
+  
+  /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Remove background image for calendar icon since we're using a separate button */
+  background-image: none;
+  
+  /* Adjust padding to accommodate the calendar button */
+  padding-right: 40px;
+  
+  /* Cursor */
+  cursor: pointer;
+}
+
+/* Optional: Focus Styles */
+.filter-item input[type="date"]:focus,
+.filter-item select:focus,
+.custom-date-picker:focus {
+  outline: none;
+  box-shadow: 0 0 5px #f39c12; /* Orange glow on focus */
+}
+
+/* Hide default calendar picker indicators */
+.filter-item input[type="date"]::-webkit-calendar-picker-indicator,
+.custom-date-picker::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+}
+
+.filter-item input[type="date"]::-moz-calendar-picker-indicator,
+.custom-date-picker::-moz-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Date Picker Wrapper */
+.date-picker-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Transparent Calendar Button */
+.calendar-button {
+  position: absolute;
+  right: 10px;
+  background: transparent; /* Transparent background */
+  border: none;
+  color: #ffffff; /* White icon color */
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0;
+  
+  /* Remove any default button styles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide the DatePicker component visually but keep it accessible */
+.hidden-datepicker {
+  display: none;
+}
+
+/* Ensure Recharts dots are always filled and have black borders */
+.chart-item .recharts-line-dot .recharts-dot-circle {
+  fill: #f39c12 !important; /* Always filled with orange */
+  stroke: #000000 !important; /* Black border */
+  stroke-width: 1px !important;
+  opacity: 0.5 !important; /* Default opacity */
+  transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+/* Increase opacity on hover */
+.chart-item .recharts-line-dot .recharts-dot-circle:hover {
+  opacity: 1 !important; /* Full opacity on hover */
+}
+
+/* Hover effect for Bar Charts */
+.chart-item .recharts-bar .recharts-rectangle:hover {
+  /* Remove any background-color change */
+  /* Just apply stroke */
+  stroke: #ffffff; /* White border on hover */
+  stroke-width: 2px;
+}
+
+/* Ensure bars are fully opaque */
+.chart-item .recharts-bar .recharts-rectangle {
+  fill-opacity: 1;
+}
+
+/* Style the "count" label below the bar graph */
+.chart-item .recharts-cartesian-axis-text[data-index="0"] {
+  fill: #ffffff !important; /* White color for "count" label */
+  font-weight: bold;
+}
+
+/* Style the Legend's boxes to have white borders and no fill */
+.recharts-legend-item rect {
+  stroke: #ffffff !important; /* White border */
+  stroke-width: 1px;
+  fill: none; /* No fill */
+}
+
+/* Adjusted charts-container */
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+}
+
+.chart-item {
+  flex: 1 1 45%;
+  max-width: 600px; /* Ensures charts don't become too wide */
+  min-width: 300px; /* Prevents charts from becoming too narrow */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevents internal content from spilling out */
+  
+  /* Similar styling to .card */
+  background: rgba(0, 0, 0, 0.6); /* Slightly darker background for charts */
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.chart-item h3 {
+  margin-top: 0;
+  color: #ffffff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chart-item {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-item {
+    flex: 1 1 100%;
+    max-height: 350px; /* Adjust max-height for smaller screens if needed */
+  }
+}
+
+/* Prevent long text from causing overflow */
+.card-content p,
+.card-content span {
+  word-wrap: break-word; /* Break long words */
+  overflow-wrap: break-word;
+}
+
+/* Custom Tooltip Styling */
+.custom-tooltip {
+  background: rgba(0, 0, 0, 0.8); /* Dark tinted background */
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  pointer-events: none; /* Prevent tooltip from capturing mouse events */
+}
+
+.custom-tooltip .label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.custom-tooltip .desc {
+  margin: 0;
+}
+
+/* Pie Chart Labels */
+.recharts-text {
+  fill: #ffffff; /* White color for labels */
+  font-size: 12px;
+}
+
+/* Add transition to Sector for smooth pop-out */
+.recharts-pie-sector {
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+/* Smooth pop-out effect on active slice */
+.recharts-pie-sector:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* Style react-datepicker to match dark theme */
+.custom-date-picker {
+  background: #333333 !important; /* Dark grey background */
+  color: #ffffff !important; /* White text */
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 8px 12px !important;
+  
+  /* Font */
+  font-size: 1em !important;
+  
+  /* Transition */
+  transition: box-shadow 0.3s ease !important;
+}
+
+/* Override react-datepicker calendar styles */
+.custom-date-picker .react-datepicker__triangle {
+  display: none;
+}
+
+.custom-date-picker .react-datepicker__header {
+  background-color: #333333 !important;
+  border-bottom: none !important;
+  color: #ffffff !important;
+}
+
+.custom-date-picker .react-datepicker__current-month,
+.custom-date-picker .react-datepicker-time__header {
+  color: #ffffff !important;
+}
+
+.custom-date-picker .react-datepicker__day,
+.custom-date-picker .react-datepicker__day-name {
+  color: #ffffff !important;
+}
+
+.custom-date-picker .react-datepicker__day--selected,
+.custom-date-picker .react-datepicker__day:hover {
+  background-color: #f39c12 !important;
+  color: #000000 !important;
+}
+
+.custom-date-picker .react-datepicker__navigation-icon::before {
+  border-color: #ffffff !important;
+}
+
+/* Added Back Button Styling */
+.back-button {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  border: none;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 5px; /* Less round for better design */
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s ease, transform 0.3s ease;
+  
+  /* Flex properties to center the icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  transform-origin: center; /* Prevents shifting on scale */
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.back-button:active {
+  transform: translateY(-50%) scale(0.95);
+  background: rgba(255, 255, 255, 0.3);
+}

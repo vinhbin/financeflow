@@ -14,9 +14,8 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
-/* Input and Select Fields Styling */
-.add-expense-form input,
-.add-expense-form select {
+/* Input Fields Styling */
+.add-expense-form input {
   padding: 10px;
   margin-bottom: 15px;
   border: none;
@@ -32,15 +31,13 @@
 }
 
 /* Placeholder Text Styling */
-.add-expense-form input::placeholder,
-.add-expense-form select::placeholder {
+.add-expense-form input::placeholder {
   color: #ffffff; /* White placeholder text */
   opacity: 0.7;
 }
 
-/* Focus States for Inputs and Selects */
-.add-expense-form input:focus,
-.add-expense-form select:focus {
+/* Focus States for Inputs */
+.add-expense-form input:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.7); /* White glow on focus */
 }
@@ -50,29 +47,34 @@
   position: relative;
   width: 100%; /* Ensure full width */
   margin-bottom: 15px;
+  
 }
 
+/* Currency Selector Styling */
 .currency-selector {
   position: absolute;
   left: 10px;
-  top: 40%;
+  top: 37%; /* Slightly pushed up from 50% */
   transform: translateY(-50%);
   cursor: pointer;
   color: #ffffff;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
-  z-index: 2;
+  z-index: 5; /* Lower than the dropdown's z-index */
+  user-select: none;
 }
 
+/* Currency Arrow Indicator */
 .currency-arrow {
   font-size: 0.8rem;
   margin-left: 5px;
 }
 
+/* Currency Dropdown Styling */
 .currency-dropdown {
   position: absolute;
-  top: 100%; /* Below the currency selector */
+  top: 110%; /* Below the currency selector */
   left: 0;
   background: rgba(64, 64, 64, 0.9); /* Dark grey background */
   border-radius: 8px;
@@ -81,16 +83,100 @@
   margin: 5px 0 0 0;
   z-index: 3;
   width: 120px; /* Adjust as needed */
+  max-height: 115px; /* Approximately 3 items */
+  overflow-y: auto; /* Enable vertical scrolling */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.currency-dropdown li {
+/* Category Selector Styling */
+.category-selector {
+  position: relative;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1rem;
+  background: rgba(64, 64, 64, 0.8); /* Dark grey background */
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px); /* Adds a slight blur to the background */
+  -webkit-backdrop-filter: blur(5px); /* For Safari */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+/* Category Arrow Indicator */
+.category-arrow {
+  font-size: 0.8rem;
+}
+
+/* Category Dropdown Styling */
+.category-dropdown {
+  position: absolute;
+  bottom: 110%;
+  left: 0;
+  background: rgba(64, 64, 64, 0.9);
+  border-radius: 8px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 5px 0 0 0;
+  width: 100%; /* Ensure it covers the entire area */
+  max-height: 150px;
+  overflow-y: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.dropdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 9998; /* Just below the dropdown */
+}
+
+/* Dropdown Items Styling */
+.currency-dropdown li,
+.category-dropdown li {
   padding: 5px 10px;
   color: #ffffff;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.currency-dropdown li:hover {
+/* Hover Effect for Dropdown Items */
+.currency-dropdown li:hover,
+.category-dropdown li:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Scrollbar Styling for WebKit Browsers */
+.currency-dropdown::-webkit-scrollbar,
+.category-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.currency-dropdown::-webkit-scrollbar-track,
+.category-dropdown::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Slightly lighter background */
+  border-radius: 3px;
+}
+
+.currency-dropdown::-webkit-scrollbar-thumb,
+.category-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* Semi-transparent thumb */
+  border-radius: 3px;
+}
+
+.currency-dropdown::-webkit-scrollbar-thumb:hover,
+.category-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5); /* Darker on hover */
 }
 
 /* Adjust the amount input to accommodate the currency symbol */
@@ -137,4 +223,9 @@
   .add-expense-form {
     width: 100%;
   }
+}
+
+/* Category Select Dropdown Scroll */
+.category-dropdown {
+  /* Already handled above */
 }

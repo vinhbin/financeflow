@@ -1,0 +1,145 @@
+/* src/components/BudgetCard.css */
+
+/* Container for the list of budgets */
+.budget-list {
+    margin-bottom: 20px;
+  }
+  
+  /* Base styles for each budget item */
+  .budget-item {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    /* Removed transition to prevent conflict with .budget-content */
+  }
+  
+  /* Content within each budget item */
+  .budget-content {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth sliding */
+  }
+  
+  /* Information section within the budget item */
+  .budget-info {
+    flex: 1;
+  }
+  
+  /* Shifted state for revealing the delete button */
+  .budget-item.shifted .budget-content {
+    transform: translateX(-50px); /* Adjust as needed */
+  }
+  
+  .budget-item.shifted {
+    /* Adjust padding to accommodate the delete button */
+    padding-right: 60px; /* Adjust to match the shift amount + delete button width */
+  }
+  
+  /* Arrow Icon Styling */
+  .budget-arrow {
+    cursor: pointer;
+    margin-left: 0;
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+  
+  .budget-item .budget-arrow {
+    order: 2; /* Place arrow after the budget info */
+  }
+  
+  /* Delete Button Styling */
+  .budget-delete-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #e74c3c; /* Red color for delete */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* Disable pointer events when hidden */
+  }
+  
+  .budget-item.shifted .budget-delete-button {
+    opacity: 1;
+    pointer-events: auto; /* Enable pointer events when visible */
+  }
+  
+  /* Transition Animations for Budget Items */
+  .budget-enter {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  
+  .budget-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .budget-exit {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .budget-exit-active {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: none; /* Instant removal without animation */
+  }
+  
+  /* Adjustments for mobile responsiveness */
+  @media (max-width: 500px) {
+    .budget-item.shifted .budget-content {
+      transform: translateX(-40px); /* Less shift on smaller screens */
+    }
+  
+    .budget-delete-button {
+      width: 25px;
+      height: 25px;
+      right: 5px;
+    }
+  }
+  
+  /* Ensure the delete button is prominently visible on hover */
+  .budget-delete-button:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Styles for the budget creation form */
+  .budget-form select,
+  .budget-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(64, 64, 64, 0.8);
+    color: #ffffff;
+  }
+  
+  .budget-form input::placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #e74c3c;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  

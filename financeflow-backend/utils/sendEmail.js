@@ -24,7 +24,7 @@ transporter.verify((error, success) => {
 });
 
 /**
- * Sends an email using a Handlebars template.
+ * Sends an email using a Handlebars template with embedded images via CID.
  *
  * @param {string} to - Recipient's email address.
  * @param {string} subject - Subject of the email.
@@ -43,12 +43,27 @@ const sendEmail = async (to, subject, templateName, context) => {
     // Generate the HTML
     const html = template(context);
 
-    // Define mail options
+    // Define the path to the logo image
+    const logoPath = path.join(__dirname, '..', 'views', 'logo192.png');
+
+    // Check if the logo file exists
+    if (!fs.existsSync(logoPath)) {
+      throw new Error(`Logo file not found at path: ${logoPath}`);
+    }
+
+    // Define mail options with attachment
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to,
       subject,
       html, // Use the compiled HTML
+      attachments: [
+        {
+          filename: 'logo192.png',
+          path: logoPath,
+          cid: 'logoImage', // Same as the cid value in the template
+        },
+      ],
     };
 
     // Send the email

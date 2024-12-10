@@ -39,6 +39,32 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Dashboard Buttons */
+.dashboard-buttons {
+  display: flex;
+  gap: 20px; /* Adjust as needed for desired distance */
+  /* Ensure alignment with card styling */
+}
+
+/* Statistics Button */
+.statistics-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.statistics-button:hover {
+  background: rgba(255, 255, 255, 0.4); /* Slightly more opaque on hover */
+}
+
 /* Logout Button */
 .logout-button {
   padding: 10px 20px;
@@ -409,7 +435,7 @@
   font-size: 1em !important;                  /* Consistent font size */
   max-width: 350px !important;                /* Limit the width of the toast */
   word-wrap: break-word !important;           /* Handle long text gracefully */
-  animation: slideInRight 0.5s ease forwards !important; /* Slide-in animation */
+  /*animation: slideInRight 0.5s ease forwards !important;  Slide-in animation                            this line messes up/wont make the toastify notification's disappear automatically or when clicking the X button*/
   position: relative !important;               /* Ensure positioning context */
 }
 
@@ -425,6 +451,7 @@
 .Toastify__toast.custom-toast .Toastify__close-button:hover {
   opacity: 1 !important;           /* Fully opaque on hover */
 }
+
 /* Optional: Slide-In Animation */
 @keyframes slideInRight {
   from {
@@ -440,4 +467,23 @@
 /* Ensure the custom-toast has higher specificity if needed */
 .Toastify__toast-container.custom-toast-container .Toastify__toast.custom-toast {
   /* Additional styles or overrides can be placed here */
+}
+
+.expense-list {
+  max-height: 300px; /* Adjust so roughly 4 expenses are visible */
+  overflow-y: auto;
+  padding-right: 10px; /* Optional: ensure scrollbar doesn't overlap text */
+}
+
+.transaction-list.scrollable-container {
+  max-height: 350px; /* Adjust as needed if item size differs for recent trasnactions*/
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* For AI insight, if you want about 300px scroll area: */
+.ai-insight-container.scrollable-container {
+  max-height: 300px; /* Adjust this value as needed */
+  overflow-y: auto;
+  padding-right: 10px;
 }

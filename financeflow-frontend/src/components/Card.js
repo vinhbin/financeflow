@@ -2,11 +2,12 @@
 import React from 'react';
 import './Card.css';
 
-const Card = ({ title, children, className }) => (
-  <div className={`card ${className ? className : ''}`}>
+// Wrap the Card component with React.forwardRef
+const Card = React.forwardRef(({ title, children, className }, ref) => (
+  <div className={`card ${className ? className : ''}`} ref={ref}>
     <h3>{title}</h3>
     <div className="card-content">{children}</div>
   </div>
-);
+));
 
-export default Card;
+export default React.memo(Card); // Optional: Memoize for performance

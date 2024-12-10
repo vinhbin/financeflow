@@ -1,0 +1,44 @@
+/* src/components/ScrollableContainer.css */
+
+/* Base styling for any scrollable container, similar to AddExpense styling */
+.scrollable-container {
+    position: relative;
+    overflow-y: auto;
+    max-height: 300px; /* Adjust so roughly 4 expenses are visible */
+    padding-right: 10px; /* Padding to ensure content not overlapped by scrollbar */
+  
+    /* Hide scrollbar by default for WebKit browsers */
+    scrollbar-width: none; /* For Firefox: no scrollbar track visible by default */
+  }
+  .scrollable-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  
+  /* When scroll-active is applied, show a styled scrollbar */
+  .scrollable-container.scroll-active::-webkit-scrollbar {
+    width: 6px; /* Show scrollbar width */
+  }
+  .scrollable-container.scroll-active::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  .scrollable-container.scroll-active::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+  .scrollable-container.scroll-active::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  /* For Firefox when active */
+  .scrollable-container.scroll-active {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Smooth transitions for scrollbar appearance and disappearance */
+  .scrollable-container {
+    transition: scrollbar-color 0.3s ease;
+  }
+  

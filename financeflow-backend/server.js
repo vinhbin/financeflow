@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const cron = require('node-cron');
 const plaidController = require('./controllers/plaidController');
 const config = require('./config/config'); // Importing config
+const budgetRoutes = require('./routes/budgetRoutes');
+const challengeRoutes = require('./routes/challengeRoutes');
 
 dotenv.config();
 
@@ -36,6 +38,8 @@ app.use('/api/expenses', expenseRoutes); // expenseRoutes already include authen
 app.use('/api/ai-insights', aiInsightsRoutes); // aiInsightsRoutes already include authenticate middleware
 app.use('/api/categories', categoryRoutes); // categoryRoutes already include authenticate middleware
 app.use('/api/notifications', notificationRoutes); // notificationRoutes already include authenticate middleware
+app.use('/api/budgets', budgetRoutes);
+app.use('/api/challenges', challengeRoutes);
 
 // Handle Undefined Routes
 app.use((req, res, next) => {
@@ -48,6 +52,7 @@ app.use(errorHandler);
 // Start the Server
 const PORT = config.port || 5005;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 // Schedule the task to run daily at midnight
 cron.schedule('0 0 * * *', async () => {

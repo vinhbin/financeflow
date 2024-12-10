@@ -4,15 +4,28 @@ const asyncHandler = require('../middleware/asyncHandler');
 
 // Add Expense
 const addExpense = asyncHandler(async (req, res) => {
-  const { userID, amount, description, categoryID } = req.body;
+  const { userID, amount, description, categoryID, currency } = req.body;
 
+  // Validate required fields (excluding currency since it's optional)
   if (!userID || amount === undefined || !description || categoryID === undefined) {
     return res.status(400).json({ error: 'Missing required fields: userID, amount, description, categoryID' });
   }
 
+  // Optional: Validate currency if provided
+  const allowedCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF', 'CNY', 'INR', 'BRL'];
+  if (currency && !allowedCurrencies.includes(currency)) {
+    return res.status(400).json({ error: 'Invalid currency code.' });
+  }
+
+  // Validate that categoryID exists
+  const [category] = await db.execute('SELECT * FROM Category WHERE categoryID = ?', [categoryID]);
+  if (category.length === 0) {
+    return res.status(400).json({ error: 'Invalid categoryID.' });
+  }
+
   try {
-    const query = 'INSERT INTO Expenses (userID, amount, description, categoryID) VALUES (?, ?, ?, ?)';
-    await db.execute(query, [userID, amount, description, categoryID || null]);
+    const query = 'INSERT INTO Expenses (userID, amount, description, categoryID, currency) VALUES (?, ?, ?, ?, ?)';
+    await db.execute(query, [userID, amount, description, categoryID || null, currency || null]);
     res.status(201).json({ message: 'Expense added successfully' });
   } catch (error) {
     console.error('Error adding expense:', error);
@@ -29,12 +42,12 @@ const getExpenses = asyncHandler(async (req, res) => {
 
   try {
     const query = `
-      SELECT e.*, c.name as categoryName 
-      FROM Expenses e 
-      LEFT JOIN Category c ON e.categoryID = c.categoryID 
-      WHERE e.userID = ? 
-      ORDER BY e.date DESC
-    `;
+    SELECT e.*, c.name as categoryName 
+    FROM Expenses e 
+    LEFT JOIN Category c ON e.categoryID = c.categoryID 
+    WHERE e.userID = ? 
+    ORDER BY e.date DESC
+  `;
     const [results] = await db.execute(query, [userID]);
 
     if (!results.length) {
@@ -63,11 +76,11 @@ const getUserMetrics = asyncHandler(async (req, res) => {
 
     // Get total transactions from Transactions table by joining with BankAccounts
     const transactionsQuery = `
-      SELECT SUM(t.amount) as totalTransactions
-      FROM Transactions t
-      INNER JOIN BankAccounts b ON t.accountID = b.id
-      WHERE b.userID = ? AND t.amount > 0
-    `;
+    SELECT SUM(t.amount) as totalTransactions
+    FROM Transactions t
+    INNER JOIN BankAccounts b ON t.accountID = b.id
+    WHERE b.userID = ? AND t.amount > 0
+  `;
     const [transactionsResults] = await db.execute(transactionsQuery, [userID]);
     const totalTransactions = transactionsResults[0]?.totalTransactions || 0;
 
@@ -114,4 +127,29 @@ const deleteExpense = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addExpense, getExpenses, getUserMetrics, deleteExpense };
+// **New Function: Get Supported Currencies**
+const getCurrencies = asyncHandler(async (req, res) => {
+  try {
+    // Define supported currencies
+    const currencies = [
+      { code: 'USD', symbol: '$' },
+      { code: 'EUR', symbol: '€' },
+      { code: 'GBP', symbol: '£' },
+      { code: 'JPY', symbol: '¥' },
+      { code: 'CAD', symbol: 'C$' },
+      { code: 'AUD', symbol: 'A$' },
+      { code: 'CHF', symbol: 'CHF' },
+      { code: 'CNY', symbol: '¥' },
+      { code: 'INR', symbol: '₹' },
+      { code: 'BRL', symbol: 'R$' },
+      // Add more currencies as needed
+    ];
+
+    res.status(200).json({ currencies });
+  } catch (error) {
+    console.error('Error fetching currencies:', error);
+    res.status(500).json({ error: 'Server error fetching currencies' });
+  }
+});
+
+module.exports = { addExpense, getExpenses, getUserMetrics, deleteExpense, getCurrencies };

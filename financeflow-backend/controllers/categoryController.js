@@ -2,6 +2,11 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const db = require('../config/dbConfig');
 
+// Helper function to capitalize words
+const capitalizeWords = (str) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
 // Create Category
 const createCategory = asyncHandler(async (req, res) => {
   const { userID, categoryName } = req.body;
@@ -13,7 +18,7 @@ const createCategory = asyncHandler(async (req, res) => {
   try {
     // Check if category already exists globally (since Category table doesn't have userID)
     const [existingCategories] = await db.execute(
-      'SELECT * FROM Category WHERE name = ?',
+      'SELECT * FROM Category WHERE LOWER(name) = LOWER(?)',
       [categoryName]
     );
 
@@ -22,7 +27,7 @@ const createCategory = asyncHandler(async (req, res) => {
     }
 
     const query = 'INSERT INTO Category (name) VALUES (?)';
-    await db.execute(query, [categoryName]);
+    await db.execute(query, [capitalizeWords(categoryName.trim())]);
 
     res.status(201).json({ message: 'Category created successfully' });
   } catch (error) {
@@ -40,7 +45,7 @@ const getUserCategories = asyncHandler(async (req, res) => {
 
   try {
     // Since Category table doesn't have userID, assume categories are global
-    const query = 'SELECT * FROM Category';
+    const query = 'SELECT * FROM Category ORDER BY name ASC';
     const [results] = await db.execute(query);
 
     if (!results.length) {

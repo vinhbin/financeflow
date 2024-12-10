@@ -29,6 +29,9 @@ const ExpenseItem = ({ expense, categories, currencySymbol, onDelete }) => {
     };
   }, []);
 
+  // **Retrieve Category Name Dynamically**
+  const categoryName = categories[expense.categoryID] || 'Unknown Category';
+
   return (
     <li
       ref={expenseRef}
@@ -48,7 +51,7 @@ const ExpenseItem = ({ expense, categories, currencySymbol, onDelete }) => {
           </div>
           <div className="expense-details">
             <span className="expense-category">
-              {categories[expense.categoryID] || 'Unknown Category'}
+              {categoryName}
             </span>
             <span className="expense-amount">
               {currencySymbol(expense.currency || 'USD')}
